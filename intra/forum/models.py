@@ -1,5 +1,7 @@
-from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class CategoryManager(models.Manager):
@@ -33,7 +35,7 @@ class Category(models.Model):
     def clean(self):
         if not (self.parent is None):
             if not (self.pk is None) and self.parent == self:
-                raise ValidationError('Category parent create infinite loop')
+                raise ValidationError(_('Category parent create infinite loop'))
             ran = []
             cat = self
             while not (cat.parent is None):
@@ -41,7 +43,7 @@ class Category(models.Model):
                 cat = cat.parent
                 if cat in ran:
                     raise ValidationError(
-                                  'Category parent create infinite loop'
+                                  _('Category parent create infinite loop')
                               )
 
     def get_path(self):
@@ -52,3 +54,35 @@ class Category(models.Model):
         return path
 
 
+class Post(models.Model):
+    cat = models.ForeignKey('Category')
+    parent = models.ForeignKey('Post', null=True, blank=True)
+    comment = models.BooleanField(default=False)
+    author = models.ForeignKey(User)
+    title = models.CharField(max_length=250, blank=True)
+    message = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        if not self.parent:
+            if not self.title:
+                raise ValidationError(
+                              _('Title can\'t be empty while the'
+                              ' post is a thread')
+                          )
+            if self.comment is True:
+                raise ValidationError(
+                              _('The post can\'t be a comment while'
+                              ' it is a thread')
+                          )
+        elif self.parent:
+            if self.title:
+                raise ValidationError(
+                              _('The title can\'t be set while'
+                              ' the post isn\'t a thread')
+                          )
+        if self.comment is True and self.parent.comment is True:
+            raise ValidationError(
+                          _('A comment post can\'t have a child'
+                          ' comment post')
+                      )
