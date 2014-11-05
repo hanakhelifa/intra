@@ -58,10 +58,15 @@ class Post(models.Model):
     cat = models.ForeignKey('Category')
     parent = models.ForeignKey('Post', null=True, blank=True)
     comment = models.BooleanField(default=False)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=250, blank=True)
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+
+    def can_be_comment(self):
+        if self.parent and self.parent.comment is False:
+            return True
+        return False
 
     def clean(self):
         if not self.parent:
@@ -81,8 +86,8 @@ class Post(models.Model):
                               _('The title can\'t be set while'
                               ' the post isn\'t a thread')
                           )
-        if self.comment is True and self.parent.comment is True:
-            raise ValidationError(
-                          _('A comment post can\'t have a child'
-                          ' comment post')
-                      )
+            if self.comment is True and self.parent.comment is True:
+                raise ValidationError(
+                              _('A comment post can\'t have a parent'
+                              ' comment post')
+                          )
