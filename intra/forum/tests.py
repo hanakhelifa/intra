@@ -12,10 +12,15 @@ class CategoryTests(TestCase):
         cata = Category(name="Category A")
         catb = Category(name="Category B", parent=cata)
         cat1.full_clean()
+        cat1.save()
         cat2.full_clean()
+        cat2.save()
         cat3.full_clean()
+        cat3.save()
         cata.full_clean()
+        cata.save()
         catb.full_clean()
+        catb.save()
 
     def test_creation_with_loop_tree(self):
         """Category with a loop tree may don't pass the clean successfully"""
@@ -31,18 +36,26 @@ class CategoryTests(TestCase):
         cat1.parent = catz
         with self.assertRaises(ValidationError):
             cat1.full_clean()
+            cat1.save()
         with self.assertRaises(ValidationError):
             cat2.full_clean()
+            cat2.save()
         with self.assertRaises(ValidationError):
             cat3.full_clean()
+            cat3.save()
         cata.full_clean()
+        cata.save()
         catb.full_clean()
+        catb.save()
         with self.assertRaises(ValidationError):
-            catz.full_clean()
+            catx.full_clean()
+            catx.save()
         with self.assertRaises(ValidationError):
             caty.full_clean()
+            caty.save()
         with self.assertRaises(ValidationError):
             catz.full_clean()
+            catz.save()
 
     def test_path(self):
         """Path is correct ?"""
@@ -51,9 +64,21 @@ class CategoryTests(TestCase):
         cat3 = Category(name="Category 3", parent=cat1)
         cata = Category(name="Category A")
         catb = Category(name="Category B", parent=cata)
+        cat1.full_clean()
+        cat1.save()
+        cat2.full_clean()
+        cat2.save()
+        cat3.full_clean()
+        cat3.save()
+        cata.full_clean()
+        cata.save()
+        catb.full_clean()
+        catb.save()
         self.assertEqual(cata.get_path(), [cata])
         self.assertEqual(cat3.get_path(), [cat1, cat3])
         catz = Category(name="Category Z", parent=cat2)
+        catz.full_clean()
+        catz.save()
         catz.parent = cat2
         self.assertEqual(catz.get_path(), [cat1, cat2, catz])
 
@@ -62,13 +87,18 @@ class ThreadBasicTests(TestCase):
     def test_creation_if_valid_thread(self):
         """Thread can have a title and must not be a comment"""
         User = get_user_model()
-        user = User(username="Test")
+        user = User(**{User.USERNAME_FIELD: "user"})
+        user.set_unusable_password()
+        user.full_clean()
+        user.save()
         cat = Category(name="Category")
         cat.full_clean()
+        cat.save()
         thread = Post(
-                         title="Topic 1",
                          cat=cat,
+                         author=user,
+                         title="Topic 1",
                          message="Voici un message",
-                         author=user
                      )
         thread.full_clean()
+        thread.save()
