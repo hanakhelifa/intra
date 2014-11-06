@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from forum.models import Category
+from forum.models import Category, Post
 
 class CategoryTests(TestCase):
     def test_creation_with_correct_tree(self):
@@ -56,3 +57,18 @@ class CategoryTests(TestCase):
         catz.parent = cat2
         self.assertEqual(catz.get_path(), [cat1, cat2, catz])
 
+
+class ThreadBasicTests(TestCase):
+    def test_creation_if_valid_thread(self):
+        """Thread can have a title and must not be a comment"""
+        User = get_user_model()
+        user = User(username="Test")
+        cat = Category(name="Category")
+        cat.full_clean()
+        thread = Post(
+                         title="Topic 1",
+                         cat=cat,
+                         message="Voici un message",
+                         author=user
+                     )
+        thread.full_clean()
