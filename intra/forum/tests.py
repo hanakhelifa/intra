@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from forum.models import Category
 
-class CategoryManagerTests(TestCase):
+class CategoryTests(TestCase):
     def test_creation_with_correct_tree(self):
         """Category with a correct tree may pass the clean successfully"""
         cat1 = Category(name="Category 1")
@@ -43,7 +43,16 @@ class CategoryManagerTests(TestCase):
         with self.assertRaises(ValidationError):
             catz.full_clean()
 
-
-class CategoryMethodsTests(TestCase):
     def test_path(self):
-        pass
+        """Path is correct ?"""
+        cat1 = Category(name="Category 1")
+        cat2 = Category(name="Category 2", parent=cat1)
+        cat3 = Category(name="Category 3", parent=cat1)
+        cata = Category(name="Category A")
+        catb = Category(name="Category B", parent=cata)
+        self.assertEqual(cata.get_path(), [cata])
+        self.assertEqual(cat3.get_path(), [cat1, cat3])
+        catz = Category(name="Category Z", parent=cat2)
+        catz.parent = cat2
+        self.assertEqual(catz.get_path(), [cat1, cat2, catz])
+
