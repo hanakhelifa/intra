@@ -102,3 +102,6 @@ class ThreadBasicTests(TestCase):
                      )
         thread.full_clean()
         thread.save()
+        self.assertFalse(thread.is_post())
+        self.assertFalse(thread.is_comment())
+        self.assertTrue(thread.is_thread())
