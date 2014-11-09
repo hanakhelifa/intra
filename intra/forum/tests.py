@@ -335,7 +335,7 @@ class PostRightsTests(TestCase):
         user.save()
         self.assertEqual(post.have_rights(user), False)
 
-    def test_post_rigths_2(self):
+    def test_post_rigths_3(self):
         """Test sur un utilisateur qui est l'auteur du post, mais qui"""
         """ ne possede pas les droits de categorie"""
         User = get_user_model()
