@@ -1,6 +1,8 @@
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -53,6 +55,16 @@ class Category(models.Model):
             path.insert(0, self)
         return path
 
+    def have_rights(self, user):
+        if user.forumrights.admin is True:
+            return True
+        try:
+            user.forumrights.mod.get(pk=self.pk)
+            return True
+        except ObjectDoesNotExist:
+            return False
+        return False
+
 
 class Post(models.Model):
     cat = models.ForeignKey('Category')
@@ -68,9 +80,11 @@ class Post(models.Model):
                           _('Title can\'t be empty while the'
                           ' post is a thread')
                       )
-        if (not self.is_thread()
-            and not self.is_post()
-            and not self.is_comment()):
+        if (
+                not self.is_thread()
+                and not self.is_post()
+                and not self.is_comment()
+            ):
             raise ValidationError(_('This post is nothing !'))
 
     def is_thread(self):
@@ -84,7 +98,7 @@ class Post(models.Model):
         return False
 
     def is_comment(self):
-        if self.parent and self.parent.parent:
+        if self.parent and self.parent.parent and not self.parent.parent.parent:
             return True
         return False
 
@@ -92,3 +106,13 @@ class Post(models.Model):
         if self.parent and not self.parent.parent:
             return True
         return False
+
+class ForumRights(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    admin = models.BooleanField(default=False)
+    mod = models.ManyToManyField('Category')
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_forumrights(sender, instance, created, **kwargs):
+    if created:
+        ForumRights.objects.create(user=instance)
