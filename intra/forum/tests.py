@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from forum.models import Category, Post
 
+
 class CategoryTests(TestCase):
     def test_creation_with_correct_tree(self):
         """Creation of a valid categories tree. This must pass the clean."""
@@ -96,11 +97,11 @@ class PostTests(TestCase):
         cat.full_clean()
         cat.save()
         thread = Post(
-                         cat=cat,
-                         author=user,
-                         title="Topic 1",
-                         message="Voici un message",
-                     )
+            cat=cat,
+            author=user,
+            title="Topic 1",
+            message="Voici un message",
+        )
         thread.full_clean()
         thread.save()
         self.assertFalse(thread.is_post())
@@ -118,20 +119,20 @@ class PostTests(TestCase):
         cat.full_clean()
         cat.save()
         thread = Post(
-                         cat=cat,
-                         author=user,
-                         title="Topic 1",
-                         message="Voici un message",
-                     )
+            cat=cat,
+            author=user,
+            title="Topic 1",
+            message="Voici un message",
+        )
         thread.full_clean()
         thread.save()
         post = Post(
-                         cat=cat,
-                         author=user,
-                         title="RE: Topic 1",
-                         message="Voici une réponse",
-                         parent=thread,
-                   )
+            cat=cat,
+            author=user,
+            title="RE: Topic 1",
+            message="Voici une réponse",
+            parent=thread,
+        )
         post.full_clean()
         post.save()
         self.assertTrue(post.is_post())
@@ -149,29 +150,29 @@ class PostTests(TestCase):
         cat.full_clean()
         cat.save()
         thread = Post(
-                         cat=cat,
-                         author=user,
-                         title="Topic 1",
-                         message="Voici un message",
-                     )
+            cat=cat,
+            author=user,
+            title="Topic 1",
+            message="Voici un message",
+        )
         thread.full_clean()
         thread.save()
         post = Post(
-                         cat=cat,
-                         author=user,
-                         title="RE: Topic 1",
-                         message="Voici une réponse",
-                         parent=thread,
-                   )
+            cat=cat,
+            author=user,
+            title="RE: Topic 1",
+            message="Voici une réponse",
+            parent=thread,
+        )
         post.full_clean()
         post.save()
         comment = Post(
-                          cat=cat,
-                          author=user,
-                          title="RE: RE: Topic 1",
-                          message="Voici un commentaire",
-                          parent=post,
-                      )
+            cat=cat,
+            author=user,
+            title="RE: RE: Topic 1",
+            message="Voici un commentaire",
+            parent=post,
+        )
         comment.full_clean()
         comment.save()
         self.assertFalse(comment.is_post())
@@ -180,7 +181,7 @@ class PostTests(TestCase):
 
     def test_can_have_comment(self):
         """A post can't have a parent if it parent have a parent."""
-        """Understood ?"""
+        """ Understood ?"""
         User = get_user_model()
         user = User(**{User.USERNAME_FIELD: "user"})
         user.set_unusable_password()
@@ -190,29 +191,29 @@ class PostTests(TestCase):
         cat.full_clean()
         cat.save()
         thread = Post(
-                         cat=cat,
-                         author=user,
-                         title="Topic 1",
-                         message="Voici un message",
-                     )
+            cat=cat,
+            author=user,
+            title="Topic 1",
+            message="Voici un message",
+        )
         thread.full_clean()
         thread.save()
         post = Post(
-                         cat=cat,
-                         author=user,
-                         title="RE: Topic 1",
-                         message="Voici une réponse",
-                         parent=thread,
-                   )
+            cat=cat,
+            author=user,
+            title="RE: Topic 1",
+            message="Voici une réponse",
+            parent=thread,
+        )
         post.full_clean()
         post.save()
         comment = Post(
-                          cat=cat,
-                          author=user,
-                          title="RE: RE: Topic 1",
-                          message="Voici un commentaire",
-                          parent=post,
-                      )
+            cat=cat,
+            author=user,
+            title="RE: RE: Topic 1",
+            message="Voici un commentaire",
+            parent=post,
+        )
         comment.full_clean()
         comment.save()
         self.assertFalse(comment.can_have_comment())
@@ -228,41 +229,42 @@ class PostTests(TestCase):
         cat.full_clean()
         cat.save()
         thread = Post(
-                         cat=cat,
-                         author=user,
-                         title="Topic 1",
-                         message="Voici un message",
-                     )
+            cat=cat,
+            author=user,
+            title="Topic 1",
+            message="Voici un message",
+        )
         thread.full_clean()
         thread.save()
         post = Post(
-                         cat=cat,
-                         author=user,
-                         title="RE: Topic 1",
-                         message="Voici une réponse",
-                         parent=thread,
-                   )
+            cat=cat,
+            author=user,
+            title="RE: Topic 1",
+            message="Voici une réponse",
+            parent=thread,
+        )
         post.full_clean()
         post.save()
         comment1 = Post(
-                           cat=cat,
-                           author=user,
-                           title="RE: RE: Topic 1",
-                           message="Voici un commentaire",
-                           parent=post,
-                       )
+            cat=cat,
+            author=user,
+            title="RE: RE: Topic 1",
+            message="Voici un commentaire",
+            parent=post,
+        )
         comment1.full_clean()
         comment1.save()
         comment2 = Post(
-                           cat=cat,
-                           author=user,
-                           title="RE: RE: Topic 1",
-                           message="Voici un commentaire",
-                           parent=comment1,
-                       )
+            cat=cat,
+            author=user,
+            title="RE: RE: Topic 1",
+            message="Voici un commentaire",
+            parent=comment1,
+        )
         with self.assertRaises(ValidationError):
             comment2.full_clean()
             comment2.save()
+
 
 class CategoryRightsTests(TestCase):
     def test_category_rigths_1(self):
@@ -302,6 +304,7 @@ class CategoryRightsTests(TestCase):
         user.forumrights.mod.add(cat)
         user.save()
         self.assertEqual(cat.have_rights(user), True)
+
 
 class PostRightsTests(TestCase):
     def test_post_rigths_1(self):

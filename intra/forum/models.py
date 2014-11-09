@@ -10,11 +10,11 @@ class CategoryManager(models.Manager):
     def get_tree(self, *args, **kwargs):
         ret = {}
         children = list(
-                           self
-                           .get_queryset()
-                           .filter(*args, **kwargs)
-                           .order_by('name')
-                       )
+            self
+            .get_queryset()
+            .filter(*args, **kwargs)
+            .order_by('name')
+        )
         for child in children:
             ret[child] = self.get_tree(parent__exact=child.id)
         return ret
@@ -45,8 +45,8 @@ class Category(models.Model):
                 cat = cat.parent
                 if cat in ran:
                     raise ValidationError(
-                                  _('Category parent create infinite loop')
-                              )
+                        _('Category parent create infinite loop')
+                    )
 
     def get_path(self):
         path = [self, ]
@@ -77,14 +77,14 @@ class Post(models.Model):
     def clean(self):
         if not self.parent and not self.title:
             raise ValidationError(
-                          _('Title can\'t be empty while the'
-                          ' post is a thread')
-                      )
+                _('Title can\'t be empty while the'
+                  ' post is a thread')
+            )
         if (
-                not self.is_thread()
-                and not self.is_post()
-                and not self.is_comment()
-            ):
+            not self.is_thread()
+            and not self.is_post()
+            and not self.is_comment()
+        ):
             raise ValidationError(_('This post is nothing !'))
 
     def is_thread(self):
@@ -112,10 +112,12 @@ class Post(models.Model):
             return True
         return self.cat.have_rights(user)
 
+
 class ForumRights(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     admin = models.BooleanField(default=False)
     mod = models.ManyToManyField('Category')
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_forumrights(sender, instance, created, **kwargs):
