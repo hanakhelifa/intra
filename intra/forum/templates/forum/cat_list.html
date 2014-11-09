@@ -1,0 +1,10 @@
+{% if cat_list %}
+<ul>
+	{% for cat in cat_list %}
+	<li>
+		{{ cat.name }}
+		{% cat_childs cat %}
+	</li>
+	{% endfor %}
+</ul>
+{% endif %}
