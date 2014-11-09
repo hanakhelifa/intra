@@ -264,7 +264,7 @@ class PostTests(TestCase):
             comment2.full_clean()
             comment2.save()
 
-class RightsTests(TestCase):
+class CategoryRightsTests(TestCase):
     def test_category_rigths_1(self):
         """Testing user with admin rights but no mod rights"""
         User = get_user_model()
@@ -303,3 +303,47 @@ class RightsTests(TestCase):
         user.save()
         self.assertEqual(cat.have_rights(user), True)
 
+class PostRightsTests(TestCase):
+    def test_post_rigths_1(self):
+        """Test sur un utilisateur qui n'est pas l'auteur du post, mais qui"""
+        """ possede les droits de categorie"""
+        User = get_user_model()
+        user = User(**{User.USERNAME_FIELD: "user1"})
+        user.set_unusable_password()
+        user.save()
+        cat = Category(name="cat1")
+        cat.save()
+        user.forumrights.mod.add(cat)
+        user.save()
+        post = Post(title="Blabla", message="Test", author=user, cat=cat)
+        post.save()
+        self.assertEqual(post.have_rights(user), True)
+
+    def test_post_rigths_2(self):
+        """Test sur un utilisateur qui n'est pas l'auteur du post, et qui"""
+        """ ne possede pas les droits de categorie"""
+        User = get_user_model()
+        user = User(**{User.USERNAME_FIELD: "user1"})
+        user.set_unusable_password()
+        user.save()
+        cat = Category(name="cat1")
+        cat.save()
+        post = Post(title="Blabla", message="Test", author=user, cat=cat)
+        post.save()
+        user = User(**{User.USERNAME_FIELD: "user2"})
+        user.set_unusable_password()
+        user.save()
+        self.assertEqual(post.have_rights(user), False)
+
+    def test_post_rigths_2(self):
+        """Test sur un utilisateur qui est l'auteur du post, mais qui"""
+        """ ne possede pas les droits de categorie"""
+        User = get_user_model()
+        user = User(**{User.USERNAME_FIELD: "user1"})
+        user.set_unusable_password()
+        user.save()
+        cat = Category(name="cat1")
+        cat.save()
+        post = Post(title="Blabla", message="Test", author=user, cat=cat)
+        post.save()
+        self.assertEqual(post.have_rights(user), True)

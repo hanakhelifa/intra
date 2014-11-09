@@ -107,6 +107,11 @@ class Post(models.Model):
             return True
         return False
 
+    def have_rights(self, user):
+        if user is self.author:
+            return True
+        return self.cat.have_rights(user)
+
 class ForumRights(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     admin = models.BooleanField(default=False)
