@@ -1,0 +1,65 @@
+*
+{
+	padding 0;
+	border: 0;
+	margin: 0;
+}
+
+body
+{
+	background-image: url("img/glitter3.gif");
+	background-repeat: repeat;
+	cursor: url("img/cursor.cur")
+}
+
+.title
+{
+	font-size: 30px;
+	font-family: 'Open Sans', sans-serif;
+	padding-right: 200px;
+}
+
+.hnavbar
+{
+	padding: 10px 10px 10px 10px;
+	background-image: url("img/glitter5.gif");
+	background-repeat: repeat;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.vnavbar
+{
+	height: 100%;
+	font-family: 'Open Sans', sans-serif;
+	padding-top: 150px;
+	padding-left: 20px;
+	padding-right: 20px;
+	position: absolute;
+	background-image: url("img/glitter.gif");
+	background-repeat: repeat;
+}
+
+.content_hnavbar
+{
+	padding: 20px 5px 20px 5px;
+}
+	
+.content_vnavbar
+{
+	padding: 20px 5px 20px 5px;
+}
+
+.searchbar
+{
+	float: right;
+	margin-right: 10px;
+}
+
+.search_button
+{
+	position:relative:
+	padding: 6px 15px;
+	left: -8px;
+	background-color: pink;
+	color: red;
+}
