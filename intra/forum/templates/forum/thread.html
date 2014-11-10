@@ -1,0 +1,17 @@
+{% load i18n %}
+<div>
+<div>{{ thread.title }}</div>
+<div><span>{{ thread.author }} :</span> {{ thread.message }}</div>
+</div>
+{% for post in thread.post_set.all %}
+<div>
+<div><span>{{ thread.author }} :</span> {{ post.message }}</div>
+</div>
+{% endfor %}
+<div>
+	<form action="{% url 'forum:reply' thread.id %}" method="POST">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="{% trans 'Reply' %}" />
+	</form>
+</div>
