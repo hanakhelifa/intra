@@ -3,7 +3,7 @@
 <ul>
 	{% for cat in cat_list %}
 	<li>
-		{{ cat.name }}
+		<a href="{% url 'forum:category' cat.id %}">{{ cat.name }}</a>
 		{% cat_list cat %}
 	</li>
 	{% endfor %}

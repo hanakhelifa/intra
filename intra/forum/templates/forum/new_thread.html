@@ -1,0 +1,12 @@
+{% load i18n %}
+<div><h2>{{ cat.name }}</h2></div>
+<div>
+	{{ form.non_field_errors }}
+	<form action="{% url 'forum:new_thread' cat.id %}" method="POST">
+		{% csrf_token %}
+		<label for="{{ form.title.id_for_label }}">{{ form.title.label }} :</label>{{ form.title }}{{ form.title.errors }}<br />
+		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
+		{{ form.message }}<br />
+		<input type="submit" value="{% trans 'Post' %}" />
+	</form>
+</div>

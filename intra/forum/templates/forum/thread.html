@@ -1,6 +1,6 @@
 {% load i18n %}
 <div>
-<div>{{ thread.title }}</div>
+<div><h2>{{ thread.title }}</h2></div>
 <div><span>{{ thread.author }} :</span> {{ thread.message }}</div>
 </div>
 {% for post in thread.post_set.all %}
@@ -9,9 +9,11 @@
 </div>
 {% endfor %}
 <div>
+	{{ form.non_field_errors }}
 	<form action="{% url 'forum:reply' thread.id %}" method="POST">
 		{% csrf_token %}
-		{{ form }}
+		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
+		{{ form.message }}<br />
 		<input type="submit" value="{% trans 'Reply' %}" />
 	</form>
 </div>
