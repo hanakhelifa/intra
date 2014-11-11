@@ -11,4 +11,5 @@ urlpatterns = patterns('',
         views.new_thread,
         name='new_thread'
     ),
+    url(r'^post/(?P<post_id>\d+)/edit/$', views.edit_post, name='edit_post'),
 )

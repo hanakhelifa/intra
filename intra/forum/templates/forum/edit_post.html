@@ -1,0 +1,16 @@
+{% load i18n %}
+<div>
+<div><h2>{{ thread.title }}</h2></div>
+</div>
+<div>
+	{{ form.non_field_errors }}
+	<form action="{% url 'forum:edit_post' post.id %}" method="POST">
+		{% csrf_token %}
+		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
+		{{ form.message }}<br />
+		<input type="submit" value="{% trans 'Edit' %}" />
+	</form>
+</div>
+{% for post_tmp in posts %}
+<div><span>{{ post_tmp.author }} :</span> {{ post_tmp.message }}</div>
+{% endfor %}

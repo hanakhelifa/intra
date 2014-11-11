@@ -18,6 +18,9 @@ def thread(request, thread_id):
             raise Http404
     except ObjectDoesNotExist:
         raise Http404
+    posts = {thread: thread.post_set.order_by('-id')}
+    for post in thread.post_set.order_by('-id'):
+        posts[post] = post.post_set.order_by('-id')
     old_post = request.session.get('_old_post')
     if old_post:
         del request.session['_old_post']
@@ -25,6 +28,7 @@ def thread(request, thread_id):
     form = PostForm(old_post, instance=post)
     context = {
         'thread': thread,
+        'posts': posts,
         'form': form,
     }
     return render(request, 'forum/thread.html', context)
@@ -80,9 +84,42 @@ def edit_post(request, post_id):
     try:
         post = Post.objects.get(id=post_id)
         if not post.have_rights(request.user):
-            return Http404
+            raise Http404
+        if post.is_thread():
+            thread = post
+        else:
+            thread = post.parent
     except ObjectDoesNotExist:
-        return Http404
+        raise Http404
+    posts = []
+    if post.is_post() or post.is_comment():
+        for post_tmp in (thread
+            .post_set
+            .filter(id__lt=post.id)
+            .order_by('-id')
+            [:5]
+        ):
+            posts.append(post_tmp)
+        if len(posts) < 5:
+            posts.append(thread)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(
+                'forum:thread',
+                args=[thread.id]
+            ))
+    else:
+        form = PostForm(initial={'message': post.message}, instance=post)
+    print(thread, posts)
+    context = {
+        'thread': thread,
+        'posts': posts,
+        'form': form,
+        'post': post,
+    }
+    return render(request, 'forum/edit_post.html', context)
 
 
 class PostForm(forms.ModelForm):

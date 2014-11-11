@@ -1,12 +1,10 @@
 {% load i18n %}
+{% load permissions %}
 <div>
 <div><h2>{{ thread.title }}</h2></div>
-<div><span>{{ thread.author }} :</span> {{ thread.message }}</div>
 </div>
-{% for post in thread.post_set.all %}
-<div>
-<div><span>{{ thread.author }} :</span> {{ post.message }}</div>
-</div>
+{% for post in posts %}
+<div><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}</div>
 {% endfor %}
 <div>
 	{{ form.non_field_errors }}

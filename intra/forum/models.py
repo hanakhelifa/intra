@@ -74,6 +74,9 @@ class Post(models.Model):
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.message
+
     def clean(self):
         if not self.parent and not self.title:
             raise ValidationError(
@@ -108,7 +111,7 @@ class Post(models.Model):
         return False
 
     def have_rights(self, user):
-        if user is self.author:
+        if user == self.author:
             return True
         return self.cat.have_rights(user)
 
