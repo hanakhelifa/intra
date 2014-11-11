@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -15,7 +16,7 @@ def thread(request, thread_id):
         thread = Post.objects.get(id=thread_id)
         if not thread.is_thread():
             raise Http404
-    except:
+    except ObjectDoesNotExist:
         raise Http404
     old_post = request.session.get('_old_post')
     if old_post:
@@ -46,10 +47,7 @@ def reply(request, thread_id):
 
 @login_required
 def category(request, cat_id):
-    try:
-        cat = Category.objects.get(id=cat_id)
-    except:
-        raise Http404
+    cat = get_object_or_404(Category, id=cat_id)
     threads = Post.objects.filter(cat=cat, parent=None)
     context = {
         'cat': cat,
@@ -59,10 +57,7 @@ def category(request, cat_id):
 
 @login_required
 def new_thread(request, cat_id):
-    try:
-        cat = Category.objects.get(id=cat_id)
-    except:
-        raise Http404
+    cat = get_object_or_404(Category, id=cat_id)
     thread = Post(cat=cat, parent=None, author=request.user)
     if request.method == "POST":
         form = PostForm(request.POST, instance=thread)
@@ -79,6 +74,15 @@ def new_thread(request, cat_id):
         'form': form,
     }
     return render(request, 'forum/new_thread.html', context)
+
+@login_required
+def edit_post(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        if not post.have_rights(request.user):
+            return Http404
+    except ObjectDoesNotExist:
+        return Http404
 
 
 class PostForm(forms.ModelForm):
