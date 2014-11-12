@@ -1,40 +1,46 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load webdesign %} 
 <html>
- <head>
-  <title>INTRA</title> 	
-  <meta charset="UTF-8">
-  <meta name="autor" content="lel-amri, mporcel, hkhelifa">
-  <meta name="keywords" content="intra, swag, 42">
-  <link rel="icon" href="{% static "img/favicon.ico" %}" type="image/x-icon">
-  <link href="{% static "style.css" %}" rel="stylesheet">
- </head>
+	<head>
+		<title>INTRA</title> 	
+		<meta charset="UTF-8">
+		<meta name="autor" content="lel-amri, mporcel, hkhelifa">
+		<meta name="keywords" content="intra, swag, 42">
+		<link rel="icon" href="{% static "img/favicon.ico" %}" type="image/x-icon">
+		<link href="{% static "style.css" %}" rel="stylesheet">
+	</head>
 
- <body>
-	 <div class="hnavbar">
-		 <span class="title">LOGO</span>
-		<span class="content_hnavbar">abc </span>
-		<span class="content_hnavbar">abc </span>
-		<span class="content_hnavbar">abc </span>
-		<span class="content_hnavbar">abc </span>
-		<span class="content_hnavbar">
-			<span><form class="searchbar">
-	<input type="text" placeholder="xlogin" required>
-	<input type="submit" value="{% trans 'Rechercher' %}">
-</form></span>
+	<body>
 
-	</div>
+		<div class="hnavbar">
+			<span class="titletxt">INTRA</span>
+			<span class="content_hnavbar">abc </span>
+			<span class="content_hnavbar">abc </span>
+			<span class="content_hnavbar">abc </span>
+			<span class="content_hnavbar">abc </span>
+			<span class="content_hnavbar"><form class="searchbar">
+					<input type="text" placeholder="xlogin" required>
+					<input value="submit" type="image" width="20px" height="18px" src="{% static "img/search1.png" %} ">
+			</form></span>
+			<span class="content_hnavbar">logout</span>
 
-	<div class="vnavbar">
-		<div class="content_vnavbar">TICKET</div>
-		<div class="content_vnavbar">MODULES</div>
-		<div class="content_vnavbar">E-LEARNING</div>
-		<div class="content_vnavbar">FORUM</div>
-		<div class="content_vnavbar">TROMBI</div>
-	</div>
+		</div>
 
+		<div class="vnavbar">
+			<div class="content_vnavbar">TICKET</div>
+			<div class="content_vnavbar">MODULES</div>
+			<div class="content_vnavbar">E-LEARNING</div>
+			<div class="content_vnavbar">FORUM</div>
+			<div class="content_vnavbar">TROMBI</div>
+		</div>
 
-  </div>
- </body>
+		<div class="content">
+			{% block "content" %}
+			{% lorem 20 p %}
+
+			{% endblock %}
+		</div>
+	</body>
 
 </html>
