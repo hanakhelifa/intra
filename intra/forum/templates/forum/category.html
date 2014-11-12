@@ -1,6 +1,9 @@
+{% extends "forum/index.html" %}
+{% block "forum_content" %}
 {% load i18n %}
 <div><h2>{{ cat.name }}</h2></div>
 <div><a href="{% url 'forum:new_thread' cat.id %}">{% trans 'New thread' %}</a></div>
 {% for thread in threads %}
 <div><a href="{% url 'forum:thread' thread.id %}"><span>{{ thread.author }}</span> - {{ thread.title }}</a></div>
 {% endfor %}
+{% endblock %}

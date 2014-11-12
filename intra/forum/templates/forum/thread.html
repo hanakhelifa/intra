@@ -1,5 +1,9 @@
-{% load i18n %}
+{% extends "forum/index.html" %}
 {% load permissions %}
+{% load i18n %}
+
+{% block "forum_content" %}
+
 <div>
 <div><h2>{{ thread.title }}</h2></div>
 </div>
@@ -15,3 +19,5 @@
 		<input type="submit" value="{% trans 'Reply' %}" />
 	</form>
 </div>
+
+{% endblock %}

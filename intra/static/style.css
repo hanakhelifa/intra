@@ -1,0 +1,93 @@
+*
+{
+	padding 0;
+	border: 0;
+	margin: 0;
+	cursor: url(http://cur.cursors-4u), url(http://cur.cursors-4u.net/nature/nat-10/nat922.png), progress !important;
+} 
+
+
+
+body
+{
+	background-image: url("img/glitter3.gif");
+	background-repeat: repeat;
+    cursor:alias;
+}
+
+.titletxt
+{
+	font-size: 40px;
+	vertical-align:center;
+	padding-right:200px;
+	font-family: Comic sans ms;
+	color: #00FFFF;
+}
+
+.hnavbar
+{
+	height:70px;
+	width: 100%;
+	line-height: 70px;
+	background-image: url("img/glitter4.gif");
+	background-repeat: repeat;
+	position: fixed;
+	font-family: Comic sans ms;
+	color: #00FFFF;
+	top:0;
+	left:0;
+	display: inline-block;
+	z-index: 1000;
+}
+
+.vnavbar
+{
+	padding-top: 180px;
+	z-index: 900;
+	top:0;
+	left:0;
+	height: 100%;
+	width: 100px;
+	font-family: Comic sans ms;
+	position: fixed;
+	color: #00FFFF;
+	background-image: url("img/glitter4.gif");
+	background-repeat: repeat;
+}
+
+.content_hnavbar
+{
+	vertical-align: center;
+}
+	
+.content_vnavbar
+{
+	padding: 20px 5px 20px 5px;
+}
+
+.searchbar
+{
+	position: relative;
+	left: 50%;
+	display: inline-block;
+}
+
+.search_button
+{
+	position:relative:
+	padding: 6px 15px;
+	left: -8px;
+	background-color: pink;
+	color: red;
+}
+
+.content
+{
+	color: purple;
+	font-family: Comic sans ms;
+	position: absolute;
+	margin-top: 90px;
+	margin-left: 120px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}

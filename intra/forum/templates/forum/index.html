@@ -1,2 +1,7 @@
+{% extends "navbar.html" %}
 {% load cat_list %}
-{% cat_list cat %}
+{% block "content" %}
+{% cat_list None %}
+{% block "forum_content" %}
+{% endblock %}
+{% endblock %}
