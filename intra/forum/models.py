@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -66,6 +67,11 @@ class Category(models.Model):
         return False
 
 
+class ThreadManager(models.Manager):
+    def get_thread(self, thread):
+        return self.get_queryset().filter(Q(id=thread.id) | Q(parent=thread.id))
+
+
 class Post(models.Model):
     cat = models.ForeignKey('Category')
     parent = models.ForeignKey('Post', null=True, blank=True)
@@ -73,6 +79,9 @@ class Post(models.Model):
     title = models.CharField(max_length=250, blank=True)
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+    thread = ThreadManager()
 
     def __str__(self):
         return self.message
