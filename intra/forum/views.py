@@ -64,7 +64,7 @@ def new_thread(request, cat_id):
     cat = get_object_or_404(Category, id=cat_id)
     thread = Post(cat=cat, parent=None, author=request.user)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=thread)
+        form = ThreadForm(request.POST, instance=thread)
         if form.is_valid():
             thread = form.save()
             return HttpResponseRedirect(reverse(
@@ -72,7 +72,7 @@ def new_thread(request, cat_id):
                 args=[thread.id]
             ))
     else:
-        form = PostForm(instance=thread)
+        form = ThreadForm(instance=thread)
     context = {
         'cat': cat,
         'form': form,
@@ -112,7 +112,6 @@ def edit_post(request, post_id):
             ))
     else:
         form = PostForm(initial={'message': post.message}, instance=post)
-    print(thread, posts)
     context = {
         'thread': thread,
         'posts': posts,
@@ -123,6 +122,12 @@ def edit_post(request, post_id):
 
 
 class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['message']
+
+
+class ThreadForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'message']
