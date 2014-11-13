@@ -4,6 +4,7 @@
 	border: 0;
 	margin: 0;
 	cursor: url(http://cur.cursors-4u), url(http://cur.cursors-4u.net/nature/nat-10/nat922.png), progress !important;
+	text-decoration: none;
 } 
 
 
@@ -90,4 +91,29 @@ body
 	margin-left: 120px;
 	margin-right: 20px;
 	margin-bottom: 20px;
+}
+
+.forum_bar
+{
+	background-image: url("img/glitter3.gif");
+	background-repeat: repeat;
+}
+
+.forum_bar_ul
+{
+	color:red;
+	text-decoration: none;
+	background-color: yellow;
+	height: 100%;
+}
+
+.forum_bar_li
+{
+	color: red;
+	height: 100%;
+}
+
+.menu_forum
+{
+	height: 100%;
 }

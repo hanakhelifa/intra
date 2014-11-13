@@ -39,7 +39,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Volumes/Data/nfs/zfs-student-3/users/2013/lel-amri/working/web1/intra/ENV"
+VIRTUAL_ENV="/Volumes/Data/nfs/zfs-student-2/users/2013/hkhelifa/intra/ENV"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
