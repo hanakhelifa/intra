@@ -48,8 +48,10 @@ def reply(request, thread_id, comment=False):
         form = PostForm(instance=post)
     if comment:
         posts = Post.thread.get_comment_thread(thread).order_by('-id')[:5]
+        action = reverse('forum:comment', args=[thread.id])
     else:
         posts = Post.thread.get_thread(thread).order_by('-id')[:5]
+        action = reverse('forum:reply', args=[thread.id])
     context = {
         'thread': thread,
         'posts': posts,

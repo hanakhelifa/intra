@@ -4,7 +4,7 @@
 </div>
 <div>
 	{{ form.non_field_errors }}
-	<form action="{% url 'forum:reply' thread.id %}" method="POST">
+	<form action="{{ action }}" method="POST">
 		{% csrf_token %}
 		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
 		{{ form.message }}<br />

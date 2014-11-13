@@ -6,7 +6,7 @@
 {% for post, comments in posts.items %}
 <div style="background-color: #ECECEC; width: 420px;"><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}{% if post|can_reply %} <span><a href="{% url 'forum:comment' post.id %}">{% trans 'Reply' %}</a></span>{% endif %}</div>
 {% for comment in comments %}
-<div style="background-color: #DCDCDC; width: 400px; padding-left: 20px;"><span>{{ comment.author }} :</span> {{ comment.message }}{% if comment|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}</div>
+<div style="background-color: #DCDCDC; width: 400px; padding-left: 20px;"><span>{{ comment.author }} :</span> {{ comment.message }}{% if comment|have_rights:user %} <span><a href="{% url 'forum:edit_post' comment.id %}">{% trans 'Edit' %}</a></span>{% endif %}</div>
 {% endfor %}
 {% endfor %}
 </div>
