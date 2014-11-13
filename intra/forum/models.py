@@ -82,16 +82,11 @@ class ThreadManager(models.Manager):
             .filter(Q(id=thread.id) | (Q(parent=thread.id) & Q(comment=True)))
         )
 
-    def get_entire_thread(self, thread):
-        results_dict = {}
-        for post in self.get_thread(thread).order_by('id'):
-            results_dict[post] = (
-                self
-                .get_comment_thread(post)
-                .order_by('id')
-                [1:]
-            )
-        return results_dict
+    def list_posts(self, thread):
+        return self.get_thread(thread).order_by('id')
+
+    def list_comments(self, post):
+        return self.get_comment_thread(post).order_by('id')[1:]
 
 class Post(models.Model):
     cat = models.ForeignKey('Category')

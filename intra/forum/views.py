@@ -18,10 +18,8 @@ def thread(request, thread_id):
             raise Http404
     except ObjectDoesNotExist:
         raise Http404
-    posts = Post.thread.get_entire_thread(thread)
     context = {
         'thread': thread,
-        'posts': posts,
     }
     return render(request, 'forum/thread.html', context)
 
