@@ -14,28 +14,32 @@ def index(request):
 def thread(request, thread_id):
     try:
         thread = Post.objects.get(id=thread_id)
-        if not thread.is_thread():
+        if not thread.is_thread() and not thread.is_post():
             raise Http404
     except ObjectDoesNotExist:
         raise Http404
-    posts = {thread: thread.post_set.order_by('-id')}
-    for post in thread.post_set.order_by('-id'):
-        posts[post] = post.post_set.order_by('-id')
+    posts = Post.thread.get_thread(thread).order_by('id')
     old_post = request.session.get('_old_post')
     if old_post:
         del request.session['_old_post']
     post = Post(cat=thread.cat, parent=thread, author=request.user)
     form = PostForm(old_post, instance=post)
+    tmp_thread = thread
+    while not (tmp_thread.parent is None):
+        tmp_thread = tmp_thread.parent
     context = {
         'thread': thread,
         'posts': posts,
         'form': form,
+        'thread_title': tmp_thread.title,
     }
     return render(request, 'forum/thread.html', context)
 
 @login_required
 def reply(request, thread_id):
     thread = get_object_or_404(Post, id=thread_id)
+    if not thread.is_thread() and not thread.is_post():
+        raise Http404
     post = Post(cat=thread.cat, parent=thread, author=request.user)
     if request.method == 'POST':
         request.session['_old_post'] = request.POST
@@ -87,21 +91,17 @@ def edit_post(request, post_id):
             raise Http404
         if post.is_thread():
             thread = post
-        else:
+        elif post.parent.is_thread():
             thread = post.parent
+        elif post.parent.parent.is_thread():
+            thread = post.parent.parent
     except ObjectDoesNotExist:
         raise Http404
-    posts = []
-    if post.is_post() or post.is_comment():
-        for post_tmp in (thread
-            .post_set
-            .filter(id__lt=post.id)
-            .order_by('-id')
-            [:5]
-        ):
-            posts.append(post_tmp)
-        if len(posts) < 5:
-            posts.append(thread)
+    posts = (Post.thread.get_thread(thread)
+        .filter(id__lt=post.id)
+        .order_by('-id')
+        [:5]
+    )
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():

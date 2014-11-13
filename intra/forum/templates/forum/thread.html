@@ -1,14 +1,14 @@
 {% extends "forum/index.html" %}
-{% load permissions %}
+{% load forum %}
 {% load i18n %}
 
 {% block "forum_content" %}
 
 <div>
-<div><h2>{{ thread.title }}</h2></div>
+<div><h2>{{ thread_title }}</h2></div>
 </div>
 {% for post in posts %}
-<div><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}</div>
+<div><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}{% if post|can_reply %} <span><a href="{% url 'forum:reply' post.id %}">{% trans 'Reply' %}</a></span>{% endif %}</div>
 {% endfor %}
 <div>
 	{{ form.non_field_errors }}
