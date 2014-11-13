@@ -82,12 +82,6 @@ class ThreadManager(models.Manager):
             .filter(Q(id=thread.id) | (Q(parent=thread.id) & Q(comment=True)))
         )
 
-    def list_posts(self, thread):
-        return self.get_thread(thread).order_by('id')
-
-    def list_comments(self, post):
-        return self.get_comment_thread(post).order_by('id')[1:]
-
 class Post(models.Model):
     cat = models.ForeignKey('Category')
     parent = models.ForeignKey('Post', null=True, blank=True)

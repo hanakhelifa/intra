@@ -15,3 +15,11 @@ def have_rights(value, user):
 @register.filter(name='can_reply')
 def can_reply(value):
     return not value.is_comment()
+
+@register.filter(name='posts_list')
+def list_posts(thread):
+    return Post.thread.get_thread(thread).order_by('id')
+
+@register.filter(name='comments_list')
+def list_comments(post):
+    return Post.thread.get_comment_thread(post).order_by('id')[1:]
