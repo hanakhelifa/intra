@@ -20,6 +20,7 @@ def thread(request, thread_id):
         raise Http404
     context = {
         'thread': thread,
+        'Post': Post,
     }
     return render(request, 'forum/thread.html', context)
 
