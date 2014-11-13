@@ -14,4 +14,4 @@ def have_rights(value, user):
 
 @register.filter(name='can_reply')
 def can_reply(value):
-    return value.is_post()
+    return not value.is_comment()

@@ -14,44 +14,51 @@ def index(request):
 def thread(request, thread_id):
     try:
         thread = Post.objects.get(id=thread_id)
-        if not thread.is_thread() and not thread.is_post():
+        if not thread.is_thread():
             raise Http404
     except ObjectDoesNotExist:
         raise Http404
-    posts = Post.thread.get_thread(thread).order_by('id')
-    old_post = request.session.get('_old_post')
-    if old_post:
-        del request.session['_old_post']
-    post = Post(cat=thread.cat, parent=thread, author=request.user)
-    form = PostForm(old_post, instance=post)
-    tmp_thread = thread
-    while not (tmp_thread.parent is None):
-        tmp_thread = tmp_thread.parent
+    posts = Post.thread.get_entire_thread(thread)
     context = {
         'thread': thread,
         'posts': posts,
-        'form': form,
-        'thread_title': tmp_thread.title,
     }
     return render(request, 'forum/thread.html', context)
 
 @login_required
-def reply(request, thread_id):
+def reply(request, thread_id, comment=False):
     thread = get_object_or_404(Post, id=thread_id)
-    if not thread.is_thread() and not thread.is_post():
+    if thread.is_comment():
         raise Http404
-    post = Post(cat=thread.cat, parent=thread, author=request.user)
+    post = Post(
+        cat=thread.cat,
+        parent=thread,
+        author=request.user,
+        comment=comment
+    )
     if request.method == 'POST':
-        request.session['_old_post'] = request.POST
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            del request.session['_old_post']
             form.save()
             return HttpResponseRedirect(reverse(
                 'forum:thread',
-                args=[thread_id]
+                args=[thread.get_master_thread().id]
             ))
-    return HttpResponseRedirect(reverse('forum:thread', args=[thread_id]))
+    else:
+        form = PostForm(instance=post)
+    if comment:
+        posts = Post.thread.get_comment_thread(thread).order_by('-id')[:5]
+        action = reverse('forum:comment', args=[thread.id])
+    else:
+        posts = Post.thread.get_thread(thread).order_by('-id')[:5]
+        action = reverse('forum:reply', args=[thread.id])
+    context = {
+        'thread': thread,
+        'posts': posts,
+        'master_thread': thread.get_master_thread(),
+        'form': form,
+    }
+    return render(request, 'forum/reply.html', context)
 
 @login_required
 def category(request, cat_id):
@@ -91,32 +98,41 @@ def edit_post(request, post_id):
             raise Http404
         if post.is_thread():
             thread = post
-        elif post.parent.is_thread():
+        else:
             thread = post.parent
-        elif post.parent.parent.is_thread():
-            thread = post.parent.parent
     except ObjectDoesNotExist:
         raise Http404
-    posts = (Post.thread.get_thread(thread)
-        .filter(id__lt=post.id)
-        .order_by('-id')
-        [:5]
-    )
+    master_thread = thread.get_master_thread()
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse(
                 'forum:thread',
-                args=[thread.id]
+                args=[master_thread.id]
             ))
     else:
         form = PostForm(initial={'message': post.message}, instance=post)
+    if post.is_comment():
+        posts = (
+            Post.thread
+            .get_comment_thread(thread)
+            .filter(id__lt=post.id)
+            .order_by('-id')[:5]
+        )
+    else:
+        posts = (
+            Post.thread
+            .get_thread(thread)
+            .filter(id__lt=post.id)
+            .order_by('-id')[:5]
+        )
     context = {
         'thread': thread,
         'posts': posts,
         'form': form,
         'post': post,
+        'master_thread': master_thread,
     }
     return render(request, 'forum/edit_post.html', context)
 
