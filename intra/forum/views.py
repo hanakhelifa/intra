@@ -98,32 +98,41 @@ def edit_post(request, post_id):
             raise Http404
         if post.is_thread():
             thread = post
-        elif post.parent.is_thread():
+        else:
             thread = post.parent
-        elif post.parent.parent.is_thread():
-            thread = post.parent.parent
     except ObjectDoesNotExist:
         raise Http404
-    posts = (Post.thread.get_thread(thread)
-        .filter(id__lt=post.id)
-        .order_by('-id')
-        [:5]
-    )
+    master_thread = thread.get_master_thread()
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse(
                 'forum:thread',
-                args=[thread.id]
+                args=[master_thread.id]
             ))
     else:
         form = PostForm(initial={'message': post.message}, instance=post)
+    if post.is_comment():
+        posts = (
+            Post.thread
+            .get_comment_thread(thread)
+            .filter(id__lt=post.id)
+            .order_by('-id')[:5]
+        )
+    else:
+        posts = (
+            Post.thread
+            .get_thread(thread)
+            .filter(id__lt=post.id)
+            .order_by('-id')[:5]
+        )
     context = {
         'thread': thread,
         'posts': posts,
         'form': form,
         'post': post,
+        'master_thread': master_thread,
     }
     return render(request, 'forum/edit_post.html', context)
 
