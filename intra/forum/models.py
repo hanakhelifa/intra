@@ -69,8 +69,29 @@ class Category(models.Model):
 
 class ThreadManager(models.Manager):
     def get_thread(self, thread):
-        return self.get_queryset().filter(Q(id=thread.id) | Q(parent=thread.id))
+        return (
+            self
+            .get_queryset()
+            .filter(Q(comment=False) & (Q(id=thread.id) | Q(parent=thread.id)))
+        )
 
+    def get_comment_thread(self, thread):
+        return (
+            self
+            .get_queryset()
+            .filter(Q(id=thread.id) | (Q(parent=thread.id) & Q(comment=True)))
+        )
+
+    def get_entire_thread(self, thread):
+        results_dict = {}
+        for post in self.get_thread(thread).order_by('id'):
+            results_dict[post] = (
+                self
+                .get_comment_thread(post)
+                .order_by('id')
+                [1:]
+            )
+        return results_dict
 
 class Post(models.Model):
     cat = models.ForeignKey('Category')
@@ -79,6 +100,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250, blank=True)
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    comment = models.BooleanField(default=False)
 
     objects = models.Manager()
     thread = ThreadManager()
@@ -92,30 +114,17 @@ class Post(models.Model):
                 _('Title can\'t be empty while the'
                   ' post is a thread')
             )
-        if (
-            not self.is_thread()
-            and not self.is_post()
-            and not self.is_comment()
-        ):
-            raise ValidationError(_('This post is nothing !'))
 
     def is_thread(self):
-        if not self.parent and self.title:
-            return True
-        return False
-
-    def is_post(self):
-        if self.parent and not self.parent.parent:
+        if not self.parent:
             return True
         return False
 
     def is_comment(self):
-        if self.parent and self.parent.parent and not self.parent.parent.parent:
-            return True
-        return False
+        return self.comment
 
     def can_have_comment(self):
-        if self.parent and not self.parent.parent:
+        if not self.is_comment():
             return True
         return False
 
@@ -123,6 +132,12 @@ class Post(models.Model):
         if user == self.author:
             return True
         return self.cat.have_rights(user)
+
+    def get_master_thread(self):
+        post = self
+        while not (post.parent is None):
+            post = post.parent
+        return post
 
 
 class ForumRights(models.Model):
