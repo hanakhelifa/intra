@@ -1,13 +1,13 @@
 {% if cat_list %}
 {% load forum %}
-<ul class="forum_bar_ul">
+<div class="forum_barre">
+<ul>
 	{% for cat in cat_list %}
-	<div class="menu_forum">
-		<li class="forum_bar_li">
+		<li>
 		<a href="{% url 'forum:category' cat.id %}">{{ cat.name }}</a>
 		{% cat_list cat %}
 		</li>
-	</div>	
 	{% endfor %}
 </ul>
+</div>
 {% endif %}

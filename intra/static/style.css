@@ -59,6 +59,7 @@ body
 .content_hnavbar
 {
 	vertical-align: center;
+	padding-right: 20px;
 }
 	
 .content_vnavbar
@@ -66,20 +67,18 @@ body
 	padding: 20px 5px 20px 5px;
 }
 
+.right_hnb
+{
+	display: inline-block;
+	float: right;
+	margin-right: 30px;
+	position: relative;
+}
 .searchbar
 {
-	position: relative;
-	left: 50%;
 	display: inline-block;
-}
+	position: fixed;
 
-.search_button
-{
-	position:relative:
-	padding: 6px 15px;
-	left: -8px;
-	background-color: pink;
-	color: red;
 }
 
 .content
@@ -87,33 +86,13 @@ body
 	color: purple;
 	font-family: Comic sans ms;
 	position: absolute;
-	margin-top: 90px;
-	margin-left: 120px;
-	margin-right: 20px;
-	margin-bottom: 20px;
+	margin-top: 70px;
+	margin-left: 100px;
 }
 
-.forum_bar
+.forum_barre
 {
-	background-image: url("img/glitter3.gif");
+	background-image: url("img/glitter1.gif");
 	background-repeat: repeat;
-}
-
-.forum_bar_ul
-{
-	color:red;
-	text-decoration: none;
-	background-color: yellow;
-	height: 100%;
-}
-
-.forum_bar_li
-{
-	color: red;
-	height: 100%;
-}
-
-.menu_forum
-{
 	height: 100%;
 }
