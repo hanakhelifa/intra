@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from forum.models import Post, Category
+from forum.utils import custom_set
 
 @login_required
 def index(request):
@@ -62,7 +63,7 @@ def reply(request, thread_id, comment=False):
 @login_required
 def category(request, cat_id):
     cat = get_object_or_404(Category, id=cat_id)
-    threads = Post.objects.filter(cat=cat, parent=None)
+    threads = custom_set(Post.objects.filter(cat=cat, parent=None))
     context = {
         'cat': cat,
         'threads': threads,

@@ -1,5 +1,6 @@
 from django import template
 from forum.models import Category, Post
+from forum.utils import custom_set
 
 register = template.Library()
 
@@ -18,8 +19,8 @@ def can_reply(value):
 
 @register.filter(name='posts_list')
 def list_posts(thread):
-    return Post.thread.get_thread(thread).order_by('id')
+    return custom_set(Post.thread.get_thread(thread).order_by('id'))
 
 @register.filter(name='comments_list')
 def list_comments(post):
-    return Post.thread.get_comment_thread(post).order_by('id')[1:]
+    return custom_set(Post.thread.get_comment_thread(post).order_by('id')[1:])

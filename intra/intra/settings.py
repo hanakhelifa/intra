@@ -39,9 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'accueil',
-	'django.contrib.webdesign',
-	'forum',
+    'accueil',
+    'django.contrib.webdesign',
+    'forum',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,3 +99,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/static/',
 )
+
+
+# Config forum
+
+FORUM_USER_PROFILE_VIEW = 'admin:auth_user_change'
+FORUM_USER_PROFILE_VIEW_ARGS = ('id', )
+FORUM_USERNAME_FIELD = 'username'
+#FORUM_AVATAR_FIELD = None
