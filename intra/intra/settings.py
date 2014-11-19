@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'annuaire',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,3 +91,14 @@ LANGUAGES = (
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Annuaire
+
+ANNUAIRE_USER_UID = 'username'
+ANNUAIRE_USER_FIRST_NAME = 'first_name'
+ANNUAIRE_USER_LAST_NAME = 'last_name'
+ANNUAIRE_USER_PROMO = 'promo'
+ANNUAIRE_USER_POOL = 'pool'
+ANNUAIRE_USER_PROFILE_VIEW = 'admin:auth_user_change'
+ANNUAIRE_USER_PROFILE_VIEW_ARGS = ('id', )
