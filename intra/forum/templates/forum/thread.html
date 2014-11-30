@@ -4,7 +4,13 @@
 
 {% block "forum_content" %}
 
+<<<<<<< HEAD
 <div><h2 class="title_forum">{{ thread.title }}</h2></div>
+=======
+<div>
+<div><h2>{{ thread.title }}</h2></div>
+</div>
+>>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
 {% for post in thread|posts_list %}
 <div class="post"><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}{% if post|can_reply %} <span><a href="{% url 'forum:comment' post.id %}">{% trans 'Reply' %}</a></span>{% endif %}</div>
 {% for comment in post|comments_list %}
