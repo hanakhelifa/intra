@@ -7,14 +7,12 @@
 	text-decoration: none;
 } 
 
-
-
 body
 {
-	background-image: url("img/glitter3.gif");
-	background-repeat: repeat;
-    cursor:alias;
+	background: url("img/green_dot.png") repeat;
 }
+
+/*navbars*/
 
 .titletxt
 {
@@ -30,30 +28,59 @@ body
 	height:70px;
 	width: 100%;
 	line-height: 70px;
-	background-image: url("img/glitter4.gif");
-	background-repeat: repeat;
+	background-color: #F8DC60;
 	position: fixed;
 	font-family: Comic sans ms;
-	color: #00FFFF;
+	color: rgb(149, 7, 194);
 	top:0;
 	left:0;
 	display: inline-block;
 	z-index: 1000;
 }
-
 .vnavbar
 {
 	padding-top: 180px;
-	z-index: 900;
+	z-index: 990;
 	top:0;
 	left:0;
 	height: 100%;
-	width: 100px;
+	width: 110px;
 	font-family: Comic sans ms;
 	position: fixed;
-	color: #00FFFF;
-	background-image: url("img/glitter4.gif");
-	background-repeat: repeat;
+	color: rgb(149, 7, 194);
+	background-color: #F8DC60;
+}
+
+
+.cnavbar
+{
+	height: 90px;
+	width: 130px;
+	z-index: 980;
+	background-color: #F8DC60;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background:
+		-moz-radial-gradient(0 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-moz-radial-gradient(100% 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-moz-radial-gradient(100% 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-moz-radial-gradient(0 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px);
+	background:
+		-o-radial-gradient(0 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-o-radial-gradient(100% 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-o-radial-gradient(100% 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-o-radial-gradient(0 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px);
+	background:
+		-webkit-radial-gradient(0 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-webkit-radial-gradient(100% 100%, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-webkit-radial-gradient(100% 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px),
+		-webkit-radial-gradient(0 0, circle, rgba(204,0,0,0) 19px, #F8DC60 20px);
+	background-position: bottom left, bottom right, top right, top left;
+	-moz-background-size: 50% 50%;
+	-webkit-background-size: 50% 50%;
+	background-size: 50% 50%;
+	background-repeat: no-repeat;
 }
 
 .content_hnavbar
@@ -67,18 +94,12 @@ body
 	padding: 20px 5px 20px 5px;
 }
 
-.right_hnb
+.searchbar
 {
-	display: inline-block;
 	float: right;
 	margin-right: 30px;
 	position: relative;
-}
-.searchbar
-{
-	display: inline-block;
-	position: fixed;
-
+	display: -webkit-box;
 }
 
 .content
@@ -86,13 +107,81 @@ body
 	color: purple;
 	font-family: Comic sans ms;
 	position: absolute;
-	margin-top: 70px;
-	margin-left: 100px;
+	top: 70px;
+	left: 110px;
 }
+
+.intra_logo
+{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+.menu
+{
+	margin-left: 109px;
+}
+
+
+
+
+
+/* !!FORUM!!*/
+
+/* NAVBAR FORUM*/
 
 .forum_barre
 {
-	background-image: url("img/glitter1.gif");
-	background-repeat: repeat;
+	background: url(img/pink_chevron.png) repeat;
 	height: 100%;
+	position: fixed;
+	width: 150px;
+	color: rgb(46, 113, 185);
+	padding-top: 40px;
+	text-decoration: none;
 }
+
+.content_forum
+{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	margin-top: 0px;
+	margin-left: 150px;
+	background: url(img/geo_green.png) repeat;
+	color: red;
+}
+
+.title_forum_bar
+{
+font-family: 'Montserrat', sans-serif;
+text-align: center;
+	padding-bottom: 60px;
+	font-size: 25px;
+	color: rgb(46, 113, 185);
+	text-decoration: none;
+}
+
+
+/* CONTENT FORUM*/
+.post
+{
+	background-color: #D0EBDB;
+	width: 700px;
+}
+
+.reply
+{
+	background-color: #E4F0E9;
+	width: 680px;
+	padding-left:20px;
+}
+
+.title_forum
+{
+	color: rgb(149, 7, 194);
+	padding: 15 0 15 30;	
+	font-size: 40px;	
+	background-color: white;
+}
+

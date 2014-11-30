@@ -1,7 +1,20 @@
 {% extends "navbar.html" %}
 {% load forum %}
 {% block "content" %}
-{% cat_list None %}
+<div class="forum_barre">
+	<div class="title_forum_bar">
+FORUM
+</div>
+
+<div class="forum_barre_cat_list">
+	{% cat_list None %}
+</div>
+
+</div>
+
+<div class="content_forum">
 {% block "forum_content" %}
+</div>
+
 {% endblock %}
 {% endblock %}

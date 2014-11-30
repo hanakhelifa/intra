@@ -12,28 +12,27 @@
 	</head>
 
 	<body>
-
+		<div class="cnavbar">
+		</div>
 		<div class="hnavbar">
-			<span class="titletxt"><a href="{% url 'accueil'%}">INTRA</a></span>
-			<span class="content_hnavbar">abc </span>
-			<span class="content_hnavbar">abc </span>
-			<span class="content_hnavbar">abc </span>
-			<span class="content_hnavbar">abc </span>
-			<span class="right_hnb">
-				<span class="content_hnavbar">
-					<form class="searchbar">
-						<input type="text" placeholder="xlogin" required>
-						<input value="submit" type="image" width="20px" height="18px" src="{% static "img/search1.png" %} ">
-					</form>
-				</span>
-			</span>
-			<span class="content_hnavbar">logout</span>
+			<span class="intra_logo"><a href="{% url 'accueil'%}"><img src="{% static "img/rainbowsheep2.gif" %}"></a></span>
+			<div class="menu">
+				<span class="content_hnavbar"><a href="http://dashboard.42.fr">dashboard</a> </span>
+				<span class="content_hnavbar">Francais </span>
+				<span class="content_hnavbar">English</span>
+				<span class="content_hnavbar">abc</span>
+				<span>logout</span>
+				<form class="searchbar">
+					<input type="text" placeholder="xlogin" required>
+					<input value="submit" type="image" width="20px" height="18px" src="{% static "img/search.png" %} ">
+				</form>
+			</div>
 		</div>
 
 		<div class="vnavbar">
 			<div class="content_vnavbar">TICKET</div>
 			<div class="content_vnavbar">MODULES</div>
-			<div class="content_vnavbar">E-LEARNING</div>
+		<div class="content_vnavbar">E-LEAR</div>
 			<div class="content_vnavbar"><a href="{% url 'forum:index'%}">FORUM</a></div>
 			<div class="content_vnavbar">TROMBI</div>
 		</div>
