@@ -64,8 +64,18 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+	}
+
+	'ldap': {
+		'ENGINE': 'ldapdb.backends.ldap',
+		'NAME': 'ldaps://ldap.42.fr:636/',
+	#	'USER': 'cn=admin,dc=42,dc=fr',
+	#	'PASSWORD': 'simoneelleestbonne',
     }
+
 }
+
+DATABASE_ROUTERS = ['ldapdb.router.Router']
 
 
 # Internationalization
