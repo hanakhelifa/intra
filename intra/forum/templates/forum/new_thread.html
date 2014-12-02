@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block "forum_content" %}
 
-<div><h2>{{ cat.name }}</h2></div>
+<div><h2 class="title_post">{{ cat.name }}</h2></div>
 <div>
 	{{ form.non_field_errors }}
 	<form action="{% url 'forum:new_thread' cat.id %}" method="POST">
