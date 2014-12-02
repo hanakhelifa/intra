@@ -4,6 +4,7 @@ from itertools import chain
 
 
 class Message(models.Model):
+    ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     message = models.TextField()
     date = models.DateTimeField(auto_now=True)
@@ -36,20 +37,25 @@ class Ticket(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     def get_status(self):
-        status = self.status__set.order_by('id').first()
+        status = self.status_set.all().order_by('id').first()
         if status is None:
             return Status.OPEN
         return status
 
     def get_assigned(self):
-        return self.assign__set.order_by('id').first()
+        return self.assign_set.all().order_by('id').first()
 
     def get_events(self):
-        messages = self.message__set.order_by(['date', 'id'])
-        assign = self.assign__set.order_by(['date', 'id'])
-        status = self.status__set.order_by(['date', 'id'])
+        messages = self.message_set.all().order_by('date')
+        assign = self.assign_set.all().order_by('date')
+        status = self.status_set.all().order_by('date')
         event_list = chain(messages, assign, status)
         event_list = sorted(event_list, key=lambda elem: elem.date)
+        return event_list
 
-    def create(self, title, message, author):
+    def create(title, message, author):
         ticket = Ticket(title=title, author=author);
+        ticket.save();
+        ticket.status_set.create(author=author, status=Status.OPEN)
+        ticket.message_set.create(author=author, message=message)
+        return ticket
