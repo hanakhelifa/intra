@@ -28,11 +28,7 @@ body
 	height:70px;
 	width: 100%;
 	line-height: 70px;
-<<<<<<< HEAD
 	background-color: #F8DC60;
-=======
-	background-color: #F2D44E;
->>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
 	position: fixed;
 	font-family: Comic sans ms;
 	color: rgb(149, 7, 194);
@@ -52,7 +48,6 @@ body
 	font-family: Comic sans ms;
 	position: fixed;
 	color: rgb(149, 7, 194);
-<<<<<<< HEAD
 	background-color: #F8DC60;
 }
 
@@ -86,9 +81,6 @@ body
 	-webkit-background-size: 50% 50%;
 	background-size: 50% 50%;
 	background-repeat: no-repeat;
-=======
-	background-color: #F2D44E;
->>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
 }
 
 .content_hnavbar
@@ -117,7 +109,6 @@ body
 	position: absolute;
 	top: 70px;
 	left: 110px;
-<<<<<<< HEAD
 }
 
 .intra_logo
@@ -130,22 +121,6 @@ body
 {
 	margin-left: 109px;
 }
-
-=======
-}
-
-.intra_logo
-{
-	position: absolute;
-	top: 20px;
-	left: 20px;
-}
-.menu
-{
-	margin-left: 109px;
-}
-
->>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
 
 
 
@@ -167,10 +142,7 @@ body
 
 .content_forum
 {
-<<<<<<< HEAD
-=======
 	padding: 20 20 20 20;
->>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
 	width: 100%;
 	height: 100%;
 	position: fixed;
@@ -178,7 +150,6 @@ body
 	margin-left: 150px;
 	background: url(img/geo_green.png) repeat;
 	color: red;
-<<<<<<< HEAD
 }
 
 .title_forum_bar
@@ -249,4 +220,3 @@ text-align: center;
 	background-color: green;
 }
 
->>>>>>> c4688ca8731c6bf31fe6df5d5dc9bc49c59ea056
