@@ -13,7 +13,6 @@ class MyUser(AbstractBaseUser):
 	birth_date = models.DateField(auto_now=False, auto_now_add=False)
 	promo = models.ForeignKey('Promo')
 	USERNAME_FIELD = 'uid'
-	REQUIRED_FIELDS = ['first_name', 'last_name', 'birth_date', 'promo']
 
 	def user_login(request):
 		if request.uid.is_authenticated():
