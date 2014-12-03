@@ -56,6 +56,9 @@ ROOT_URLCONF = 'intra.urls'
 
 WSGI_APPLICATION = 'intra.wsgi.application'
 
+# User settings
+
+AUTH_PROFILE_MODULE='profile.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
