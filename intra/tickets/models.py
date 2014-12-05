@@ -4,6 +4,9 @@ from itertools import chain
 
 
 class Message(models.Model):
+    def __str__(self):
+        return self.message
+
     ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     message = models.TextField()
@@ -11,8 +14,20 @@ class Message(models.Model):
 
 
 class Assign(models.Model):
+    def __str__(self):
+        return ('Assigned to ' + self.assigned_to.get_username()
+            + ' by ' + self.author.get_username()
+        )
+
     ticket = models.ForeignKey('Ticket')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='assigned_by'
+    )
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='assigned_to'
+    )
     date = models.DateTimeField(auto_now=True)
 
 
@@ -25,6 +40,9 @@ class Status(models.Model):
         (CLOSE, 'Closed'),
     )
 
+    def __str__(self):
+        return self.Status[self.status][1] + ' by ' + self.author.get_username()
+
     ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.IntegerField(choices=Status, default=OPEN)
@@ -35,6 +53,9 @@ class Ticket(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    def __str__(self):
+        return self.title
 
     def get_status(self):
         status = self.status_set.all().order_by('id').first()
