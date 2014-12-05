@@ -1,9 +1,25 @@
 from django.db import models
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, AbstractBaseUser
+from django.contrib.auth.models import User, BaseUserManager, AbstractBaseUser
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+
+class MyManager(BaseUserManager):
+	def create_user(self, uid, password=None):
+		if not uid:
+			raise ValueError ("User must have valid uid")
+		user = self.model(uid=uid)
+
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
+
+	def create_superuser(self, uid, password):
+		user = self.create_user(email, password)
+		user.is_admin=True
+		user.save(using=self._db)
+		return user
 
 class MyUser(AbstractBaseUser):
 	uid = models.CharField(max_length=8, unique=True, primary_key=True)
@@ -13,6 +29,14 @@ class MyUser(AbstractBaseUser):
 	birth_date = models.DateField(auto_now=False, auto_now_add=False)
 	promo = models.ForeignKey('Promo')
 	USERNAME_FIELD = 'uid'
+
+	objects = MyManager()
+
+	def get_full_name(self):
+		return self.uid
+
+	def get_short_name(self):
+		return self.uid
 
 	def user_login(request):
 		if request.uid.is_authenticated():
@@ -32,6 +56,7 @@ class MyUser(AbstractBaseUser):
 		else:
 			form = AuthenticationForm()
 		return HttpResponse('congratulations, you have been accepted!')
+
 
 class Promo(models.Model):
 	year = models.CharField(max_length=4)
