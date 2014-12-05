@@ -58,13 +58,11 @@ class Ticket(models.Model):
         return self.title
 
     def get_status(self):
-        status = self.status_set.all().order_by('id').first()
-        if status is None:
-            return Status.OPEN
+        status = self.status_set.all().order_by('-id').first()
         return status
 
     def get_assigned(self):
-        return self.assign_set.all().order_by('id').first()
+        return self.assign_set.all().order_by('-id').first()
 
     def get_events(self):
         messages = self.message_set.all().order_by('date')
@@ -80,3 +78,19 @@ class Ticket(models.Model):
         ticket.status_set.create(author=author, status=Status.OPEN)
         ticket.message_set.create(author=author, message=message)
         return ticket
+
+    def add_message(self, author, message):
+        self.message_set.create(author=author, message=message)
+
+    def close(self, author):
+        if not (self.get_status().status is Status.CLOSE):
+            self.status_set.create(author=author, status=Status.CLOSE)
+
+    def open(self, author):
+        if not (self.get_status().status is Status.OPEN):
+            self.status_set.create(author=author, status=Status.OPEN)
+
+    def assign(self, author, to):
+        if (self.get_assigned() is None
+            or not (self.get_assigned().assigned_to is to)):
+            self.assign_set.create(author=author, assigned_to=to)
