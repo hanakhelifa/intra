@@ -59,10 +59,15 @@ class Ticket(models.Model):
 
     def get_status(self):
         status = self.status_set.all().order_by('-id').first()
-        return status
+        if status is None:
+            return Status.OPEN
+        return status.status
 
     def get_assigned(self):
-        return self.assign_set.all().order_by('-id').first()
+        assign = self.assign_set.all().order_by('-id').first()
+        if assign is None:
+            return None
+        return assign.assigned_to
 
     def get_events(self):
         messages = self.message_set.all().order_by('date')
@@ -80,17 +85,21 @@ class Ticket(models.Model):
         return ticket
 
     def add_message(self, author, message):
-        self.message_set.create(author=author, message=message)
+        if not (self.get_status() is Status.CLOSE):
+            return self.message_set.create(author=author, message=message)
+        return None
 
     def close(self, author):
-        if not (self.get_status().status is Status.CLOSE):
-            self.status_set.create(author=author, status=Status.CLOSE)
+        if not (self.get_status() is Status.CLOSE):
+            return self.status_set.create(author=author, status=Status.CLOSE)
+        return None
 
     def open(self, author):
-        if not (self.get_status().status is Status.OPEN):
-            self.status_set.create(author=author, status=Status.OPEN)
+        if not (self.get_status() is Status.OPEN):
+            return self.status_set.create(author=author, status=Status.OPEN)
+        return None
 
     def assign(self, author, to):
-        if (self.get_assigned() is None
-            or not (self.get_assigned().assigned_to is to)):
-            self.assign_set.create(author=author, assigned_to=to)
+        if not (self.get_assigned() is to):
+            return self.assign_set.create(author=author, assigned_to=to)
+        return None

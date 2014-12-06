@@ -10,7 +10,7 @@ class TicketTestCase(TestCase):
         User.objects.create(username="Nathan")
         User.objects.create(username="Lea")
 
-    def test_creation(self):
+    def test_ticket_creation(self):
         """A ticket require title, message and author to be created"""
         user = User.objects.get(username="Emma")
         ticket = Ticket.create(
@@ -21,7 +21,7 @@ class TicketTestCase(TestCase):
         )
         self.assertIsInstance(ticket, Ticket)
 
-    def test_creation_events(self):
+    def test_ticket_creation_events(self):
         """At ticket creation, the ticket status must be set to OPEN and a"""
         """ message must be created."""
         user = User.objects.get(username="Emma")
@@ -40,7 +40,123 @@ class TicketTestCase(TestCase):
             " pour créer des tickets, comment faire ?")
         self.assertEqual(ticket.assign_set.all().count(), 0)
 
-    def test_events(self):
+    def test_ticket_close_1(self):
+        """Closing an opened ticket may succed"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        status = ticket.close(author=lucas)
+        self.assertIsInstance(status, Status)
+        self.assertEqual(status.status, Status.CLOSE)
+
+    def test_ticket_close_2(self):
+        """Closing a closed ticket may fail"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        ticket.close(author=lucas)
+        self.assertEqual(ticket.close(author=lucas), None)
+
+    def test_ticket_open_1(self):
+        """Opening a closed ticket may succed"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        ticket.close(author=lucas)
+        status = ticket.open(author=lucas)
+        self.assertIsInstance(status, Status)
+        self.assertEqual(status.status, Status.OPEN)
+
+    def test_ticket_open_2(self):
+        """Opening a opened ticket may fail"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        self.assertEqual(ticket.open(author=lucas), None)
+
+    def test_ticket_add_message_1(self):
+        """Adding a message to an opened ticket may succed"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        message = ticket.add_message(lucas, "OKTAMER")
+        self.assertIsInstance(message, Message)
+        self.assertEqual(message.author, lucas)
+        self.assertEqual(message.message, "OKTAMER")
+
+    def test_ticket_add_message_2(self):
+        """Adding a message to a closed ticket may fail"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        ticket.close(author=emma)
+        message = ticket.add_message(lucas, "OKTAMER")
+        self.assertEqual(message, None)
+
+    def test_ticket_assign_1(self):
+        """Assign a ticket to a different user than the actual assigned user"""
+        """ may succed"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        lea = User.objects.get(username="Lea")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        assign = ticket.assign(author=lucas, to=lea)
+        self.assertIsInstance(assign, Assign)
+        self.assertEqual(assign.author, lucas)
+        self.assertEqual(assign.assigned_to, lea)
+
+    def test_ticket_assign_2(self):
+        """Assign a ticket to the same user than the actual assigned user"""
+        """ may fail"""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        lea = User.objects.get(username="Lea")
+        nathan = User.objects.get(username="Nathan")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        ticket.assign(author=nathan, to=lea)
+        self.assertEqual(ticket.assign(author=lucas, to=lea), None)
+
+    def test_ticket_events(self):
         """The event list must be sorted by date (Or order of creation)"""
         emma = User.objects.get(username="Emma")
         lucas = User.objects.get(username="Lucas")
