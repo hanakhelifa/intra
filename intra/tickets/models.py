@@ -100,6 +100,6 @@ class Ticket(models.Model):
         return None
 
     def assign(self, author, to):
-        if not (self.get_assigned() is to):
+        if self.get_assigned() != to:
             return self.assign_set.create(author=author, assigned_to=to)
         return None
