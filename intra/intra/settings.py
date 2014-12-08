@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'intra.wsgi.application'
 
 # User settings
 
-AUTH_PROFILE_MODULE='profile.MyUser'
+AUTH_USER_MODEL='user_auth.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

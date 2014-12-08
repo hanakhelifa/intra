@@ -16,18 +16,20 @@ class MyManager(BaseUserManager):
 		return user
 
 	def create_superuser(self, uid, password):
-		user = self.create_user(email, password)
+		user = self.create_user(uid, password)
 		user.is_admin=True
+		user.is_staff=True
 		user.save(using=self._db)
 		return user
 
 class MyUser(AbstractBaseUser):
 	uid = models.CharField(max_length=8, unique=True, primary_key=True)
 	pwd = models.CharField(max_length=20)
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=30)
-	birth_date = models.DateField(auto_now=False, auto_now_add=False)
-	promo = models.ForeignKey('Promo')
+	first_name = models.CharField(null=True,max_length=30)
+	last_name = models.CharField(null=True,max_length=30)
+	birth_date = models.DateField(null=True,auto_now=False, auto_now_add=False)
+	promo = models.ForeignKey('Promo', null=True)
+	is_staff = models.BooleanField(default=False)
 	USERNAME_FIELD = 'uid'
 
 	objects = MyManager()

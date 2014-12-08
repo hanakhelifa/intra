@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from register import views
+from user_auth import models
 
 urlpatterns = patterns('',
 		url(r'^$', views.login_input, name='check_login'),
