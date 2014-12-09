@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import User, BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -22,7 +22,7 @@ class MyManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-class MyUser(AbstractBaseUser):
+class MyUser(AbstractBaseUser, PermissionsMixin):
 	uid = models.CharField(max_length=8, unique=True, primary_key=True)
 	pwd = models.CharField(max_length=20)
 	first_name = models.CharField(null=True,max_length=30)
@@ -30,6 +30,10 @@ class MyUser(AbstractBaseUser):
 	birth_date = models.DateField(null=True,auto_now=False, auto_now_add=False)
 	promo = models.ForeignKey('Promo', null=True)
 	is_staff = models.BooleanField(default=False)
+	def has_perm(self, perm,obj=None):
+		return True
+	def has_module_perms(self, app_label):
+		return True
 	USERNAME_FIELD = 'uid'
 
 	objects = MyManager()
@@ -59,9 +63,7 @@ class MyUser(AbstractBaseUser):
 			form = AuthenticationForm()
 		return HttpResponse('congratulations, you have been accepted!')
 
-
 class Promo(models.Model):
 	year = models.CharField(max_length=4)
-
 
 
