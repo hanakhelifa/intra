@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<body>
+	<form action="{% url 'login' %}" method="post">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="OK"/>
+	</form>
+	<br /><a href="{% url 'admin:index' %}">Admin</a>
+</body>
