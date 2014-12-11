@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
 def user_login(request):
+	print('log in')
 	if request.user.is_authenticated():
-		return HttpResponse('User logged in')
+		return HttpResponseRedirect(reverse('homepage'))
 	if request.method == 'POST':
 		form = AuthenticationForm(data=request.POST)
 		if form.is_valid():
@@ -16,16 +16,17 @@ def user_login(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					return HttpResponseRedirect(reverse('admin:index'))
+					return HttpResponseRedirect(reverse('homepage'))
 				else:
 					return HttpResponse('disabled account')
-			else:
-				return HttpResponse('invalid login')
+			elif:
+				return HttpResponse('USE LDAP')
 	else:
 		form = AuthenticationForm()
 	return render(request, 'login/login.html', { 'form' : form })
 
 def user_logout(request):
+	print('log out')
 	logout(request)
-	return HttpResponse('User logged out')
+	return HttpResponseRedirect(reverse('login'))	
 
