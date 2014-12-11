@@ -124,17 +124,24 @@ class Ticket(models.Model):
 
 @receiver(post_save, sender=Status)
 def update_last_status(sender, **kwargs):
-    instance = kwargs.get('instance')
-    instance.ticket.last_status = instance.status
+    if kwargs.get('created', False):
+        instance = kwargs.get('instance')
+        instance.ticket.last_status = instance.status
+        instance.ticket.save()
 
 @receiver(post_save, sender=Assign)
 def update_last_assign(sender, **kwargs):
-    instance = kwargs.get('instance')
-    instance.ticket.last_assigned = instance.assigned_to
+    if kwargs.get('created', False):
+        instance = kwargs.get('instance')
+        instance.ticket.last_assigned = instance.assigned_to
+        instance.ticket.save()
 
 def update_last_event_date(sender, **kwargs):
-    instance = kwargs.get('instance')
-    instance.ticket.last_event_date = instance.date
+    if kwargs.get('created', False):
+        instance = kwargs.get('instance')
+        instance.ticket.last_event_date = instance.date
+        instance.ticket.save()
 
 post_save.connect(update_last_event_date, sender=Status)
 post_save.connect(update_last_event_date, sender=Assign)
+post_save.connect(update_last_event_date, sender=Message)

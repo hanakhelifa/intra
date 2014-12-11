@@ -208,3 +208,53 @@ class TicketTestCase(TestCase):
         self.assertIsInstance(events[7], Message)
         self.assertEqual(events[7].message, "Le bouton \"Envoyer\" ne"
             " fonctionne pas")
+
+    def test_ticket_lastfields(self):
+        """The \"last\" fields of Ticket object must be updated each time a"""
+        """ Status or Assign object is created."""
+        emma = User.objects.get(username="Emma")
+        lucas = User.objects.get(username="Lucas")
+        nathan = User.objects.get(username="Nathan")
+        ticket = Ticket.create(
+            title="Probleme de ticket",
+            message="Il n'existe pas d'interface pour créer des tickets,"
+                " comment faire ?",
+            author=emma
+        )
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(
+            ticket.last_event_date,
+            ticket.message_set.get().date
+        )
+
+        message = ticket.add_message(
+            lucas,
+            "J'assigne ce ticket a notre developpeur front-end"
+        )
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_event_date, message.date)
+
+        assign = ticket.assign(lucas, nathan)
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_assigned, assign.assigned_to)
+        self.assertEqual(ticket.last_event_date, assign.date)
+
+        message = ticket.add_message(nathan, "La section de creation de ticket"
+            " a ete mise en ligne.")
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_event_date, message.date)
+
+        status = ticket.close(nathan)
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_status, status.status)
+        self.assertEqual(ticket.last_event_date, status.date)
+
+        status = ticket.open(emma)
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_status, status.status)
+        self.assertEqual(ticket.last_event_date, status.date)
+
+        message = ticket.add_message(emma, "Le bouton \"Envoyer\" ne fonctionne"
+            " pas")
+        ticket = Ticket.objects.get(pk=ticket.pk)
+        self.assertEqual(ticket.last_event_date, message.date)
