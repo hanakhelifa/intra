@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from itertools import chain
 
 
@@ -10,7 +12,7 @@ class Message(models.Model):
     ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     message = models.TextField()
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Assign(models.Model):
@@ -28,7 +30,7 @@ class Assign(models.Model):
         settings.AUTH_USER_MODEL,
         related_name='assigned_to'
     )
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Status(models.Model):
@@ -46,13 +48,29 @@ class Status(models.Model):
     ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.IntegerField(choices=Status, default=OPEN)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Ticket(models.Model):
     title = models.CharField(max_length=100)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    last_status = models.IntegerField(
+        choices=Status.Status,
+        null=True,
+        blank=True
+    )
+    last_assigned = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        related_name='last_assigned'
+    )
+    last_event_date = models.DateTimeField(
+        auto_now_add=True,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.title
@@ -103,3 +121,20 @@ class Ticket(models.Model):
         if self.get_assigned() != to:
             return self.assign_set.create(author=author, assigned_to=to)
         return None
+
+@receiver(post_save, sender=Status)
+def update_last_status(sender, **kwargs):
+    instance = kwargs.get('instance')
+    instance.ticket.last_status = instance.status
+
+@receiver(post_save, sender=Assign)
+def update_last_assign(sender, **kwargs):
+    instance = kwargs.get('instance')
+    instance.ticket.last_assigned = instance.assigned_to
+
+def update_last_event_date(sender, **kwargs):
+    instance = kwargs.get('instance')
+    instance.ticket.last_event_date = instance.date
+
+post_save.connect(update_last_event_date, sender=Status)
+post_save.connect(update_last_event_date, sender=Assign)
