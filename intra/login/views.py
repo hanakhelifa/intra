@@ -3,9 +3,10 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from ldap import Server, Connection, STRATEGY_SYNC, SEARCH_SCOPE_WHOLE_TREE, GET_ALL_INFO, AUTH_SIMPLE
 
 def user_login(request):
-	print('log in')
+	s = Server('ldaps://ldap.42.fr:636')
 	if request.user.is_authenticated():
 		return HttpResponseRedirect(reverse('homepage'))
 	if request.method == 'POST':
@@ -19,14 +20,14 @@ def user_login(request):
 					return HttpResponseRedirect(reverse('homepage'))
 				else:
 					return HttpResponse('disabled account')
-			elif:
-				return HttpResponse('USE LDAP')
+			else:
+				c = Connection(s, client_strategy=STRATEGY_SYNC, auto_bind=True, authentication=AUTH_SIMPLE)
+				return render ('USE LDAP')
 	else:
 		form = AuthenticationForm()
 	return render(request, 'login/login.html', { 'form' : form })
 
 def user_logout(request):
-	print('log out')
 	logout(request)
 	return HttpResponseRedirect(reverse('login'))	
 
