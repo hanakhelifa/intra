@@ -1,0 +1,6 @@
+<form method="POST" action="{% url 'tickets:create' %}">
+	{% csrf_token %}
+	{{ form_ticket }}
+	{{ form_message }}
+	<input type="submit" value="Submit" />
+</form>

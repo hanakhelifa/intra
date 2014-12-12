@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from tickets.forms import TicketForm, MessageForm
 from tickets.models import Ticket, Status
 
 @login_required
@@ -24,4 +25,17 @@ def tickets_list(request):
 
 @login_required
 def create(request):
-    raise Http404
+    if request.method == 'POST':
+        form_ticket = TicketForm(request.POST)
+        form_message = MessageForm(request.POST)
+    else:
+        form_ticket = TicketForm()
+        form_message = MessageForm()
+    return render(
+        request,
+        'tickets/create.html',
+        {
+            'form_ticket': form_ticket,
+            'form_message': form_message,
+        }
+    )
