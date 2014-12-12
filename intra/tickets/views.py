@@ -21,3 +21,7 @@ def tickets_list(request):
         .order_by('status', '-last_event_date')
     )
     return render(request, 'tickets/tickets_list.html', {'tickets': tickets})
+
+@login_required
+def create(request):
+    raise Http404

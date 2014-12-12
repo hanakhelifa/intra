@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if tickets %}
 {% for ticket in tickets %}
 {{ ticket.title }} - {{ ticket.date }}
@@ -5,4 +6,4 @@
 {% else %}
 <div>There is no ticket</div>
 {% endif %}
-{% url 'tickets:create' %}
+<a href="{% url 'tickets:create' %}">{% trans "Create" %}</a>
