@@ -1,0 +1,8 @@
+{% if tickets %}
+{% for ticket in tickets %}
+{{ ticket.title }} - {{ ticket.date }}
+{% endfor %}
+{% else %}
+<div>There is no ticket</div>
+{% endif %}
+{% url 'tickets:create' %}
