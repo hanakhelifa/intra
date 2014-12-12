@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
-from tickets.forms import TicketForm, MessageForm
+from django.shortcuts import render, get_object_or_404
+from tickets.forms import TicketForm, MessageForm, AssignForm
 from tickets.models import Ticket, Status
 
 @login_required
@@ -28,6 +28,12 @@ def create(request):
     if request.method == 'POST':
         form_ticket = TicketForm(request.POST)
         form_message = MessageForm(request.POST)
+        if form_ticket.is_valid() and form_message.is_valid():
+            Ticket.create(
+                title=form_ticket.cleaned_data['title'],
+                message=form_message.cleaned_data['message'],
+                author=request.user
+            )
     else:
         form_ticket = TicketForm()
         form_message = MessageForm()
@@ -37,5 +43,27 @@ def create(request):
         {
             'form_ticket': form_ticket,
             'form_message': form_message,
+        }
+    )
+
+@login_required
+def view(request, ticket_id):
+    ticket = get_object_or_404(Ticket, pk=ticket_id)
+    form = MessageForm()
+    if request.user.is_superuser:
+        assign_form = AssignForm()
+    else:
+        assign_form = None
+    events = ticket.get_events()
+    return render(
+        request,
+        'tickets/view.html',
+        {
+            'ticket': ticket,
+            'ticket_id': ticket_id,
+            'events': events,
+            'form': form,
+            'assign_form': assign_form,
+            'Status': Status,
         }
     )

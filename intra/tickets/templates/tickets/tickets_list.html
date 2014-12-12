@@ -1,9 +1,10 @@
 {% load i18n %}
+{% load l10n %}
 {% if tickets %}
 {% for ticket in tickets %}
-{{ ticket.title }} - {{ ticket.date }}
+<div>{% if ticket.last_assigned == user %}ASSIGNED : {% endif %}<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a> by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}</div>
 {% endfor %}
 {% else %}
 <div>There is no ticket</div>
 {% endif %}
-<a href="{% url 'tickets:create' %}">{% trans "Create" %}</a>
+<div><a href="{% url 'tickets:create' %}">{% trans "Create" %}</a></div>
