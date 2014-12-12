@@ -1,9 +1,9 @@
+import ldap
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from ldap import Server, Connection, STRATEGY_SYNC, SEARCH_SCOPE_WHOLE_TREE, GET_ALL_INFO, AUTH_SIMPLE
 
 def user_login(request):
 	s = Server('ldaps://ldap.42.fr:636')
@@ -21,7 +21,7 @@ def user_login(request):
 				else:
 					return HttpResponse('disabled account')
 			else:
-				c = Connection(s, client_strategy=STRATEGY_SYNC, auto_bind=True, authentication=AUTH_SIMPLE)
+				init = ldap.initialize(s)
 				return render ('USE LDAP')
 	else:
 		form = AuthenticationForm()
