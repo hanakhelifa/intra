@@ -19,7 +19,10 @@ class Message(models.Model):
 class Assign(models.Model):
     def __str__(self):
         return (_("Assigned to {user_assigned} by {user_assignated}")
-            % self.assigned_to.get_username(), self.author.get_username()
+            .format(
+                user_assigned=self.assigned_to.get_username(),
+                user_assignated=self.author.get_username()
+            )
         )
 
     ticket = models.ForeignKey('Ticket')
@@ -45,7 +48,10 @@ class Status(models.Model):
 
     def __str__(self):
         return (_("{status} by {user}")
-            % self.Status[self.status][1], self.author.get_username()
+            .format(
+                status=self.Status[self.status][1],
+                user=self.author.get_username()
+            )
         )
 
     ticket = models.ForeignKey('Ticket')
