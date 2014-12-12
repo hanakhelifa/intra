@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from itertools import chain
+from django.utils.translation import ugettext_lazy as _
 
 
 class Message(models.Model):
@@ -17,8 +18,8 @@ class Message(models.Model):
 
 class Assign(models.Model):
     def __str__(self):
-        return ('Assigned to ' + self.assigned_to.get_username()
-            + ' by ' + self.author.get_username()
+        return (_("Assigned to {user_assigned} by {user_assignated}")
+            % self.assigned_to.get_username(), self.author.get_username()
         )
 
     ticket = models.ForeignKey('Ticket')
@@ -38,12 +39,14 @@ class Status(models.Model):
     CLOSE = 1
 
     Status = (
-        (OPEN, 'Opened'),
-        (CLOSE, 'Closed'),
+        (OPEN, _('Opened')),
+        (CLOSE, _('Closed')),
     )
 
     def __str__(self):
-        return self.Status[self.status][1] + ' by ' + self.author.get_username()
+        return (_("{status} by {user}")
+            % self.Status[self.status][1], self.author.get_username()
+        )
 
     ticket = models.ForeignKey('Ticket')
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
