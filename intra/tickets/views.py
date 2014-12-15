@@ -76,9 +76,9 @@ def view(request, ticket_id):
     if request.method == "POST":
         if 'open' in request.POST:
             ticket.open(request.user)
-            form = MessageForm()
+            form = MessageForm(request.POST)
             if request.user.is_superuser:
-                assign_form = AssignForm()
+                assign_form = AssignForm(request.POST)
         else:
             form = MessageForm(request.POST)
             if request.user.is_superuser:
@@ -90,7 +90,7 @@ def view(request, ticket_id):
                         message=form.cleaned_data['message']
                     )
                     form = MessageForm()
-                if assign_form.is_valid():
+                if request.user.is_superuser and assign_form.is_valid():
                     assign = ticket.assign(
                         author=request.user,
                         to=assign_form.cleaned_data['assigned_to']
