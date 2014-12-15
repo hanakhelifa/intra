@@ -6,21 +6,17 @@
 	<p>{{ event }}</p>
 </div>
 {% endfor %}
+{% if ticket.last_status == Status.OPEN %}
 <div>
 	<form method="POST" action="{% url 'tickets:view' ticket_id %}">
 		{% csrf_token %}
 		{{ form.message.label }} :<br />
 		{{ form.message }}<br />
-		<input type="submit" name='reply' value="Reply" />
-	</form>
-</div>
-{% if assign_form %}
-<div>
-	<form method="POST" action="{% url 'tickets:view' ticket_id %}">
-		{% csrf_token %}
+		{% if assign_form %}
 		{% trans "Assign to" %} :<br />
 		{{ assign_form.assigned_to }}<br />
-		<input type="submit" name='assign' value="Assign" />
+		{% endif %}
+		<input type="submit" name='reply' value="Reply" />
 	</form>
 </div>
 {% endif %}

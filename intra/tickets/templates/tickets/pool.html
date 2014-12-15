@@ -1,0 +1,40 @@
+{% load i18n %}
+{% load l10n %}
+<h2>Opened tickets</h2>
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Date</th>
+	</tr>
+{% if opened_tickets %}
+{% for ticket in opened_tickets %}
+<tr>
+	<td>{% if ticket.last_assigned == user %}ASSIGNED : {% endif %}<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a></td>
+	<td>{{ ticket.author.username }}</td>
+	<td>{{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr><td colspan="3">There is no ticket</td></tr>
+{% endif %}
+</table>
+<h2>Closed tickets</h2>
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Date</th>
+	</tr>
+{% if closed_tickets %}
+{% for ticket in closed_tickets %}
+<tr>
+	<td>{% if ticket.last_assigned == user %}ASSIGNED : {% endif %}<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a></td>
+	<td>{{ ticket.author.username }}</td>
+	<td>{{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr><td colspan="3">There is no ticket</td></tr>
+{% endif %}
+</table>
