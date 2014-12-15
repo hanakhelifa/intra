@@ -4,17 +4,33 @@
 
 {% block "forum_content" %}
 
-<div><h2 class="title_post">{{ thread.title }}</h2></div>
 
-<div class="forum_content">
+<div class="forum_header"><span class="title_post">{{ thread.title }}</div>
+
 
 {% for post in thread|posts_list %}
-<div class="post"><span>{{ post.author }} :</span> {{ post.message }}{% if post|have_rights:user %} <span><a href="{% url 'forum:edit_post' post.id %}">{% trans 'Edit' %}</a></span>{% endif %}{% if post|can_reply %} <span><a href="{% url 'forum:comment' post.id %}">{% trans 'Reply' %}</a></span>{% endif %}</div>
-{% for comment in post|comments_list %}
-<div class="reply"><span>{{ comment.author }} :</span> {{ comment.message }}{% if comment|have_rights:user %} <span><a href="{% url 'forum:edit_post' comment.id %}">{% trans 'Edit' %}</a></span>{% endif %}</div>
-{% endfor %}
-{% endfor %}
-<div><a href="{% url 'forum:reply' thread.id %}">Reply</a></div>
 
+<div class="post">
+	<div>{{ post.message }}{% if post|have_rights:user %}</div> 
+	
+	<div> {% trans 'Par' %} {{ post.author }}, {% trans 'le'%} {{ post.date }}</div>
+	
+	<span><a href="{% url 'forum:edit_post' post.id %}" class="new_thread_button_small">{% trans 'Edit' %}</a></span>
+	{% endif %}{% if post|can_reply %} 
+	<span><a href="{% url 'forum:comment' post.id %}" class="new_thread_button_small">{% trans 'Reply' %}</a></span>
+	{% endif %}
 </div>
+
+{% for comment in post|comments_list %}
+<div class="reply">
+	<span>{{ comment.author }} :</span>
+	{{ comment.message }}{% if comment|have_rights:user %}
+	<span><a href="{% url 'forum:edit_post' comment.id %}">{% trans 'Edit' %}</a></span>
+	{% endif %}
+</div>
+{% endfor %}
+{% endfor %}
+
+<div><a href="{% url 'forum:reply' thread.id %}" class="new_thread_button">Reply</a></div>
+
 {% endblock %}

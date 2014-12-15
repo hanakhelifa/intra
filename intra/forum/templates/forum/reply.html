@@ -1,16 +1,29 @@
+{% extends "forum/index.html" %}
+{% block "forum_content" %}
 {% load i18n %}
-<div>
-<div><h2>{{ master_thread.title }}</h2></div>
+
+
+<div class="forum_header">
+<div class="title_post">{{ master_thread.title }}</div>
 </div>
+
 <div>
 	{{ form.non_field_errors }}
 	<form action="{{ action }}" method="POST">
 		{% csrf_token %}
 		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
 		{{ form.message }}<br />
-		<input type="submit" value="{% trans 'Reply' %}" />
+		<input type="submit" class="new_thread_button_small" value="{% trans 'Reply' %}" />
 	</form>
 </div>
+
 {% for post in posts %}
-<div><span>{{ post.author }} :</span> {{ post.message }}</div>
+
+<div>
+	<span>{{ post.author }} :</span>
+	{{ post.message }}
+</div>
+
+
 {% endfor %}
+{% endblock%}
