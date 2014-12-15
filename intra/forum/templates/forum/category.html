@@ -11,12 +11,13 @@
 
 {% for thread in threads %}
 	<div class="category_list">
+		<a href="{% url 'forum:thread' thread.id %}">
 		<div class="category_title">
-			<a href="{% url 'forum:thread' thread.id %}">
-{{ thread.title }}</a>
+{{ thread.title }}
 		</div>
 		<div class="category_details">
 			{% trans 'Par' %} {{ thread.author }}, {% trans 'le'%} {{ thread.date }}
+			</a>
 		</div>
 	</div>
 

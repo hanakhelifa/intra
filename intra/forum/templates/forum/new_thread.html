@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block "forum_content" %}
 
-<div><h2 class="title_post">{{ cat.name }}</h2></div>
+<div class="title_post">{{ cat.name }}</div>
 <div>
 	{{ form.non_field_errors }}
 	<form action="{% url 'forum:new_thread' cat.id %}" method="POST">
@@ -10,7 +10,7 @@
 		<label for="{{ form.title.id_for_label }}">{{ form.title.label }} :</label>{{ form.title }}{{ form.title.errors }}<br />
 		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
 		{{ form.message }}<br />
-		<input type="submit" value="{% trans 'Post' %}" />
+		<input type="submit" class= "new_thread_button" value="{% trans 'Post' %}" />
 	</form>
 </div>
 
