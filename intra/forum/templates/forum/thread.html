@@ -9,13 +9,13 @@
 {% for post in thread|posts_list %}
 
 <div class="post">
-	<div>{{ post.message|linebreaksbr }}{% if post|have_rights:user %}</div> 
+	<div class="content_post">{{ post.message|linebreaksbr }}{% if post|have_rights:user %}</div> 
 	
-	<div class="details_thread"> {% trans 'Par' %} {{ post.author }}, {% trans 'le'%} {{ post.date }}</div>
+	<div class="details_thread"> {% trans 'Par' %} {{ post.author }}, {% trans 'le'%} {{ post.date }}
 	
 	<span><a href="{% url 'forum:edit_post' post.id %}" class="new_thread_button_small">{% trans 'Edit' %}</a></span>
 	{% endif %}{% if post|can_reply %} 
-	<span><a href="{% url 'forum:comment' post.id %}" class="new_thread_button_small">{% trans 'Reply' %}</a></span>
+	<span><a href="{% url 'forum:comment' post.id %}" class="new_thread_button_small">{% trans 'Comment' %}</a></span></div>
 	{% endif %}
 
 {% for comment in post|comments_list %}

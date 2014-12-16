@@ -11,9 +11,12 @@
 	{{ form.non_field_errors }}
 	<form action="{{ action }}" method="POST">
 		{% csrf_token %}
-		<label for="{{ form.message.id_for_label }}">{{ form.message.label }} :</label>{{ form.message.errors }}<br />
-		{{ form.message }}<br />
-		<input type="submit" class="new_thread_button_small" value="{% trans 'Reply' %}" />
+		<div>		<label for="{{ form.message.id_for_label }}">
+			{{ form.message.label }}k :
+		</label></div>
+		{{ form.message.errors }}
+		{{ form.message }}
+		<div><input type="submit" class="new_thread_button_small" value="{% trans 'Reply' %}" /></div>
 	</form>
 </div>
 

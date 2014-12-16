@@ -1,0 +1,30 @@
+{% load i18n %}
+<h2>{{ ticket.title }}</h2>
+{% for event in events %}
+<div>
+	<p>{{ event.author.username }} - {{ event.date|date:"SHORT_DATETIME_FORMAT" }}</p>
+	<p>{{ event }}</p>
+</div>
+{% endfor %}
+{% if ticket.last_status == Status.OPEN %}
+<div>
+	<form method="POST" action="{% url 'tickets:view' ticket_id %}">
+		{% csrf_token %}
+		{{ form.message.label }} :<br />
+		{{ form.message }}<br />
+		{% if assign_form %}
+		{% trans "Assign to" %} :<br />
+		{{ assign_form.assigned_to }}<br />
+		{% endif %}
+		<input type="submit" name='reply' value="Reply" />
+	</form>
+</div>
+{% endif %}
+<form method="POST" action="{% url 'tickets:view' ticket_id %}">
+	{% csrf_token %}
+	{% if ticket.last_status == Status.OPEN %}
+	<input type="submit" name='close' value="{% trans "Close" %}" />
+	{% else %}
+	<input type="submit" name='open' value="{% trans "Open" %}" />
+	{% endif%}
+</form>
