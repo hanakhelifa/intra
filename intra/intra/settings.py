@@ -39,9 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user_auth',
-	'login',
-	'homepage',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,9 +55,6 @@ ROOT_URLCONF = 'intra.urls'
 
 WSGI_APPLICATION = 'intra.wsgi.application'
 
-# User settings
-
-AUTH_USER_MODEL='user_auth.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -69,16 +63,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'ldap': {
-        'ENGINE': 'ldapdb.backends.ldap',
-        'NAME': 'ldaps://ldap.42.fr:636/',
-        #'USER': 'cn=admin,dc=42,dc=fr',
-        #'PASSWORD': 'simoneelleestbonne',
-    },
+    }
 }
-
-DATABASE_ROUTERS = ['ldapdb.router.Router']
 
 
 # Internationalization
