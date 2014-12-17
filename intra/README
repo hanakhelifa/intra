@@ -1,0 +1,12 @@
+Pour installer django-ldapdb :
+
+git clone https://github.com/jlaine/django-ldapdb.git
+cd django-ldapdb
+vim setup.py
+vim ldapdb/tests.py
+pip install ./
+
+
+Pour installer python-ldap compatible python 3 :
+
+pip install git+https://github.com/rbarrois/python-ldap.git@py3
