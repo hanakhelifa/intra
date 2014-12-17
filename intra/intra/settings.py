@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'auth',
+    'intra_auth',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,3 +89,8 @@ LANGUAGES = (
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Auth
+
+AUTH_USER_MODEL = 'intra_auth.User'
