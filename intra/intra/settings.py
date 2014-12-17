@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'accueil',
     'django.contrib.webdesign',
     'forum',
+    'tickets',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'intra.urls'
@@ -107,3 +109,5 @@ FORUM_USER_PROFILE_VIEW = 'admin:auth_user_change'
 FORUM_USER_PROFILE_VIEW_ARGS = ('id', )
 FORUM_USERNAME_FIELD = 'username'
 #FORUM_AVATAR_FIELD = None
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
