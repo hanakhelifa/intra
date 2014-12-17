@@ -9,7 +9,7 @@
 
 body
 {
-	background: url("img/green_dot.png") repeat;
+	background: url("img/geo_green.png") repeat;
 }
 a
 {
@@ -151,7 +151,6 @@ a:hover
 {
 	width: 100%;
 	height: 100%;
-	position: fixed;
 	margin-top: 0px;
 	margin-left: 150px;
 	background: url(img/geo_green.png) repeat;

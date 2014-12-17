@@ -1,3 +1,6 @@
+{% extends "navbar.html" %}
+{% block "content" %}
+
 {% load i18n %}
 <h2>{{ ticket.title }}</h2>
 {% for event in events %}
@@ -16,7 +19,7 @@
 		{% trans "Assign to" %} :<br />
 		{{ assign_form.assigned_to }}<br />
 		{% endif %}
-		<input type="submit" name='reply' value="Reply" />
+		<input type="submit" class="new_thread_button" name='reply' value="Reply" />
 	</form>
 </div>
 {% endif %}
@@ -28,3 +31,5 @@
 	<input type="submit" name='open' value="{% trans "Open" %}" />
 	{% endif%}
 </form>
+
+{% endblock %}

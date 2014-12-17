@@ -1,10 +1,23 @@
+{% extends "navbar.html" %}
 {% load i18n %}
 {% load l10n %}
+{% block "content" %}
+
 {% if tickets %}
 {% for ticket in tickets %}
-<div>{% if ticket.last_assigned == user %}ASSIGNED : {% endif %}<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a> by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}</div>
+<div>
+	{% if ticket.last_assigned == user %}
+		ASSIGNED : 
+	{% endif %}
+	<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a>
+iiiii	by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}
+</div>
+
 {% endfor %}
 {% else %}
-<div>There is no ticket</div>
+
+<div>{% trans 'There is no ticket' %}</div>
 {% endif %}
-<div><a href="{% url 'tickets:create' %}">{% trans "Create" %}</a></div>
+	<a href="{% url 'tickets:create' %}" class="new_thread_button">{% trans "Create" %}</a>
+
+{% endblock %}

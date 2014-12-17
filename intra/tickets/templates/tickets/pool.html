@@ -1,3 +1,6 @@
+{% extends "navbar.html" %}
+{% block "content" %}
+
 {% load i18n %}
 {% load l10n %}
 <h2>Opened tickets</h2>
@@ -38,3 +41,5 @@
 <tr><td colspan="3">There is no ticket</td></tr>
 {% endif %}
 </table>
+
+{% endblock %}

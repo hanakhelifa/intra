@@ -110,4 +110,4 @@ FORUM_USER_PROFILE_VIEW_ARGS = ('id', )
 FORUM_USERNAME_FIELD = 'username'
 #FORUM_AVATAR_FIELD = None
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
