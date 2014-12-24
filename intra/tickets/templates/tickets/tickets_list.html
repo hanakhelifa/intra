@@ -3,14 +3,18 @@
 {% load l10n %}
 {% block "content" %}
 
+<div class="ticket_header"><h1>Tickets submitted</h1></div>
+<div class="content_ticket">
 {% if tickets %}
 {% for ticket in tickets %}
-<div>
+<div class="tickets_lists_block">
+	<a href="{% url 'tickets:view' ticket.pk %}">
 	{% if ticket.last_assigned == user %}
-		ASSIGNED : 
+		{% trans 'ASSIGNED :' %}
 	{% endif %}
-	<a href="{% url 'tickets:view' ticket.pk %}">{{ ticket.title }}</a>
-iiiii	by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}
+{{ ticket.title }}
+	by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORMAT" }}
+</a>
 </div>
 
 {% endfor %}
@@ -18,6 +22,10 @@ iiiii	by {{ ticket.author.username }} - {{ ticket.date|date:"SHORT_DATETIME_FORM
 
 <div>{% trans 'There is no ticket' %}</div>
 {% endif %}
-	<a href="{% url 'tickets:create' %}" class="new_thread_button">{% trans "Create" %}</a>
+	
+<div class="button_space">
+<a href="{% url 'tickets:create' %}" class="new_thread_button">{% trans "Create" %}</a>
+</div>
+</div>
 
 {% endblock %}

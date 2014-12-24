@@ -1,12 +1,17 @@
 {% extends "navbar.html" %}
 {% block "content" %}
 
+<div class="ticket_header">
+	<h1>Create new ticket</h1>
+</div>
+<div class='content_ticket'>
 <form method="POST" action="{% url 'tickets:create' %}">
 	{% csrf_token %}
 	{{ form_ticket.title.label }} : {{ form_ticket.title }}<br />
 	{{ form_message.message.label }} :<br />
 	{{ form_message.message }}<br />
-	<input type="submit" class="new_thread_button" value="Submit" />
+	<div class="button_space"><input type="submit" class="new_thread_button" value="Submit" /></div>
 </form>
+</div>
 
 {% endblock %}

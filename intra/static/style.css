@@ -336,3 +336,33 @@ margin-bottom: 10px;
 {
 	margin-bottom: 30px;
 }
+
+.content_ticket
+{
+	margin-left: 50px;
+	margin-top: 99px;
+}
+
+.tickets_lists_block
+{
+	background-color: rgba(235, 221, 221, 0.77);
+	padding: 5px;
+	margin: 4px;
+}
+
+.button_space
+{
+	margin-top: 20px;
+	margin-left: 30px;
+}
+
+.ticket_header
+{
+	width: 100%;
+	position: fixed;
+	background-color: rgba(249, 250, 239, 0.79);
+	text-decoration: none;
+	height: 75px;
+	margin-bottom: 30px;	
+	padding-left: 20px;
+}
